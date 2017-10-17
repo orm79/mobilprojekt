@@ -1,0 +1,8 @@
+# Dependency dirs
+node_modules/
+
+# Production dirs 
+pub/
+
+# Files
+package-lock.json
