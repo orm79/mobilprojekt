@@ -1,4 +1,4 @@
-<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+<nav class="navbar is-light" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
         <img src="http://placehold.it/112x28" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
@@ -67,4 +67,4 @@
         </span> Logga ut
       </a>
   </nav>
-  <main class="container">
+  
