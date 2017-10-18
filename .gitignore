@@ -6,3 +6,4 @@ pub/
 
 # Files
 package-lock.json
+dev/config.php

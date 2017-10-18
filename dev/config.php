@@ -21,7 +21,7 @@ $divider = " - ";
 define ("SITE_ROOT", $_SERVER["DOCUMENT_ROOT"]);
 
 // Define global constans with server connection params
- define("DBHOST", "host");
+ define("DBHOST", "test");
  define("DBUSER", "username");
  define("DBPASS", "password");
  define("DBDATABASE", "database");
