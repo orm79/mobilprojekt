@@ -1,3 +1,7 @@
+.form-container {
+  max-width: 720px;
+  margin: 0 auto; }
+
 /*! bulma.io v0.6.0 | MIT License | github.com/jgthms/bulma */
 @keyframes spinAround {
   from {

@@ -1,5 +1,8 @@
 <?php
-  $thisPage = "Hem";
+/**
+* Daniel Olsson <orol1600@student.miun.se>
+*/
+$thisPage = "Hem";
   include("includes/head.inc.php");
   include("includes/nav.inc.php");
 ?>
