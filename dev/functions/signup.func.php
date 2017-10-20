@@ -6,13 +6,18 @@
 */
 function signUp() {
     // declare properties as inputs, after trimming whitespace
-    $fname   = trim($_POST["signup-fname"]);
-    $lname  = trim($_POST["signup-lname"]);
-    $email  = trim($_POST["signup-email"]);
-    $pass   = trim($_POST["signup-pass"]);
-    $pass2 = trim($_POST["signup-pass2"]);
+    $fname = trim($_POST["fname"]);
+    $lname = trim($_POST["lname"]);
+    $email = trim($_POST["email"]);
+    $pass1  = trim($_POST["pass1"]);
+    $pass2 = trim($_POST["pass2"]);
+    $admin = "";
+    
+    if( isset($_POST["admin"])) {
+        $admin = 1;
+    };
 
-    if(!($pass === $pass2)) {
+    if(!($pass1 === $pass2)) {
         $msg = "Lösenorden stämmer inte överens";
         return $msg;
         exit();
@@ -20,20 +25,20 @@ function signUp() {
         // new instance of Validate class
         $validate = new Validate();
         // call Validate::signup with first name/last name/email/password parameters
-        $valid = $validate -> signup($fname, $lname, $email, $pass);
+        $valid = $validate -> signup($fname, $lname, $email, $pass1);
         // if the returned string is not "valid" return the failure message
         if ($valid !== "valid") {
             return $valid;
-            unset($_POST["signup-btn"]);
+            unset($_POST["form-button"]);
             exit();
         } else {
             // else create a new instance of User class
             $user = new User();
             // call User::signup with first name/last name/pass/email parameters
-            $signup = $user -> signup($fname, $lname, $pass, $email);
+            $signup = $user -> signup($fname, $lname, $pass1, $email, $admin);
             // return account successfully created message
             return $signup;
-            unset($_POST["signup-btn"]);            
+            unset($_POST["form-button"]);            
             exit();
         }
     }

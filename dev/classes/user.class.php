@@ -54,7 +54,7 @@ class User {
     /**
     * Get user type admin (true or false)
     * 
-    * @return bool Boolean true or false
+    * @return int 0 or 1
     */    
     public function get_admin() {
       $email = $_SESSION["sess_id"];
@@ -98,14 +98,6 @@ class User {
         if(password_verify($pass, $result["password"])) {
             // if it matches set a session variable with the value of the email
             $_SESSION["sess_id"] = $result["email"];
-            // update l_visit in users table
-            $query = ("UPDATE users
-                       SET l_visit = NOW(), added = added
-                       WHERE email = :email");
-            
-            $this -> db -> query($query);
-            $this -> db -> bind("email", $email);
-            $this -> db -> execute();
             
             return true;
         } else {
@@ -119,14 +111,15 @@ class User {
     * Sign-up database query
     * Inserts new user into table users if email not already in database
     *
-    * @param $fname  string    User first name
-    * @param $lname  string    User last name
-    * @param $pass   string    User password
-    * @param $email  string    User email
+    * @param $fname      string    User first name
+    * @param $lname      string    User last name
+    * @param $pass       string    User password
+    * @param $email      string    User email
+    * @param $admin      tinyint   Is user admin 1 or 0
     *
     * @return string  Success or fail messages for account creation
     */    
-    public function signup($fname, $lname, $pass, $email) {
+    public function signup($fname, $lname, $pass, $email, $admin) {
         // hashing the password 
         $pass = password_hash($pass, PASSWORD_DEFAULT);
         // the query
@@ -146,8 +139,8 @@ class User {
             exit();
         }
         // if no matching email is found execute statement to insert data in table users
-        $query = "INSERT INTO users (fname, lname, password, email)
-                  VALUES (:fname, :lname ,:pass , :email)";
+        $query = "INSERT INTO users (fname, lname, password, email, admin)
+                  VALUES (:fname, :lname ,:pass , :email, :admin)";
         
         $this -> db -> query($query);
         
@@ -155,6 +148,7 @@ class User {
         $this -> db -> bind(":lname", $lname);
         $this -> db -> bind(":pass", $pass);
         $this -> db -> bind(":email", $email);
+        $this -> db -> bind(":admin", $admin);
 
         $this -> db -> execute();
         // if a row was inserted return success message                               

@@ -2,16 +2,114 @@
 /**
 * Daniel Olsson <orol1600@student.miun.se>
 */
-session_start();
 $thisPage = "Registrera användare";
   include("includes/head.inc.php");
   include("includes/nav.inc.php");
+  include("functions/signup.func.php");
+
+  $fname = "";
+  $lname = "";
+  $email = "";
+  if(isset($POST["form-button"])) {
+    $fname = $_POST["fname"];
+    $lname = $_POST["lname"];
+    $email = $_POST["email"];
+  }
 ?>
-<section class="section">
+<section class="hero is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Registrering
+      </h1>
+      <h2 class="subtitle">
+        Lägg till ny användare
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section container">
   
-  <!-- <div class="form-container">
-    <h1 class="is-size-4 is-uppercase<">Lägg till ny användare</h1>
-    <br>
+  <div class="column is-6 is-offset-3">
+
+  <h1 class="is-size-4 is-uppercase<">Lägg till ny användare</h1>
+  <br>
+  <form action="adduser.php" method="post" class="box">
+    <div class="field">
+      <label class="label">Förnamn</label>
+      <div class="control">
+        <input class="input" id="fname" name="fname" type="text" placeholder="Förnamn">
+      </div>
+    </div>
+    
+    <div class="field">
+      <label class="label">Efternamn</label>
+      <div class="control">
+        <input class="input" id="lname" name="lname" type="text" placeholder="Efternamn">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">E-post</label>
+      <div class="control">
+        <input class="input" id="email" name="email" type="email" placeholder="E-post">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Lösenord</label>
+      <div class="control">
+        <input class="input" id="pass1" name="pass1" type="password" placeholder="Lösenord">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Upprepa lösenord</label>
+      <div class="control">
+        <input class="input" id="pass2" name="pass2" type="password" placeholder="Upprepa lösenord">
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="control">
+        <label class="checkbox">
+          <input type="checkbox" name="admin">
+            Användaren ska vara administratör</a>
+        </label>
+      </div>
+    </div
+
+      <br />
+
+      <div class="field">
+        <div class="control">
+          <input type="submit" class="button is-primary is-medium" id="formButton" name="form-button" value="SKICKA"></input>
+        </div>
+      </div>
+      </form>
+
+      <br />
+
+
+      <div id="userMsgSection">
+      <?php
+      if(isset($_POST["form-button"])) {
+        $msg = signUp();
+        unset($_POST["form-button"]);
+        if($msg == "Ny användare skapad") {
+          echo "<div class='notification is-success' id='userMsg'>
+            <button class='delete' id='userMsgDel'></button>" . $msg . "</div>";
+        } elseif(strlen($msg) > 0) {
+          echo "<div class='notification is-danger' id='userMsg'>
+          <button class='delete' id='userMsgDel'></button>" . $msg . "</div>";
+        }
+      }
+      ?>
+</div>
+
+</div> <!-- /end .column -->
+    <!-- <div class="form-container">
     <div class="field">
     <label class="label">Förnamn</label>
     <div class="control has-icons-left has-icons-right">
@@ -101,6 +199,14 @@ $thisPage = "Registrera användare";
       </div>
   </div> -->
 </section>
+
+
+
+<script>
+  
+
+
+</script>
 <?php
   include("includes/footer.inc.php");
 ?>

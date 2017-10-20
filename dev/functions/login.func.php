@@ -1,21 +1,23 @@
 <?php
 /**
 * Attempts to log in user with email and password from inputs
-* On User::login() success redirect to home.php
-* On failure redirect to login.php?retry
+* On User::login() success redirect to admin.php or home.php
+* On failure redirect to index.php?retry
 *
 * @author    Daniel Olsson <orol1600@student.miun.se>
 */
 function logIn() {
     // declare properties
-    $email = trim($_POST["login-mail"]);
-    $pass  = trim($_POST["login-pass"]);
+    $email = trim($_POST["email"]);
+    $pass  = trim($_POST["pass"]);
     $user  = new User();
          
     $log_in = $user -> login($email, $pass);
     // if DB::login call successful check user type and redirect
     if($log_in == true) {
-        if( ($user -> get_admin($email)) === true ) {
+        
+        $admin = $user -> get_admin($email);
+        if( ($admin["admin"]) === 1 ) {
             Redirect::to("admin.php");
             exit();
         } else {

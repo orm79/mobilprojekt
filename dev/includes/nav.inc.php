@@ -1,7 +1,21 @@
+<?php if(!User::logged_in()) {
+        Redirect::to("index.php");
+      }
+
+      $user = new User();
+      $logged_in = User::logged_in();
+      $admin = $user -> get_admin();
+      ?>
+
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="#">
-        <img src="http://placehold.it/112x28" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+
+      <a class="navbar-item" href="<?php if($logged_in && ($admin["admin"] == 1)) {
+          echo 'admin.php';
+          } else {
+            echo 'home.php';
+          }?>">
+        <img src="http://placehold.it/112x28" alt="Hotell Lyx Logotyp" width="112" height="28">
       </a>
 
       <button class="button navbar-burger" data-target="navMenu">
@@ -12,7 +26,11 @@
     </div>
 
     <div class="navbar-menu navbar-end" id="navMenu">
-      <a class="navbar-item">
+      <a class="navbar-item" href="<?php if($logged_in && ($admin["admin"] == 1)) {
+          echo 'admin.php';
+          } else {
+            echo 'home.php';
+          }?>">
         Hem
       </a>
       <div class="navbar-item has-dropdown is-hoverable">
@@ -61,7 +79,7 @@
           </a>
         </div>
       </div>
-      <a class="navbar-item">
+      <a class="navbar-item" href="logout.php">
         <span class="icon has-text-danger">
           <i class="fa fa-sign-out"></i>
         </span> Logga ut
