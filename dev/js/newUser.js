@@ -3,21 +3,20 @@
 //-- Object containing methods related to the error/success messages
 //-- on the register new users page.
 
-newUserMsg = {
-  
-  delete: function() {
+var newUser = {
+
+  errMsgClose: function() {
     //delete message div if x-button is pressed
-    document.getElementById('userMsgSection').addEventListener('click', function(e) {
-    
+    $('body').on('click', '#userMsgDel', function(e) {
+
       var messageSection = document.getElementById('userMsgSection');
       var messageDiv = document.getElementById('userMsg');
-      var button = e.target;
 
-      if(button && button.nodeName =="BUTTON") {
-        messageSection.removeChild(messageDiv);
-      }
+      messageSection.removeChild(messageDiv);
+
     });
   }
-}
 
-newUserMsg.delete();
+};
+
+newUser.errMsgClose();

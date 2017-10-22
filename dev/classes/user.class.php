@@ -180,9 +180,9 @@ class User {
     }
 
 
-  /**
+    /**
 	* Log user out
-  * public static so no need to instantiate
+    * public static so no need to instantiate
 	*/    
 	public static function log_out() {
 		$user = $_SESSION["sess_id"];

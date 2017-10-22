@@ -39,11 +39,26 @@ class Room {
     $this -> info    = $info;
     $this -> comment = $comment;
     
+    //check that room nr isn't already in table
+    $query = "SELECT nr
+              FROM rooms
+              WHERE nr = :nr";
+    
+    $this -> db -> query($query);
+    $this -> db -> bind(":nr, $nr");
+    $result = $this -> db -> result();
+
+    if($result) {
+      $message = "duplicate";
+      return $message;
+      exit();
+    }
+
+    //if room nr is not in table 
     $query = "INSERT INTO rooms (nr, status, info, comment)
               VALUES (:nr, :status, :info, :comment)";
     
     $this -> db -> query($query);
-    
     $this -> db -> bind(":nr", $this -> nr);
     $this -> db -> bind(":status", $this -> status);
     $this -> db -> bind(":info", $this -> info);

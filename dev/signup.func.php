@@ -4,7 +4,7 @@
 *
 * @author    Daniel Olsson <orol1600@student.miun.se>
 */
-function signUp() {
+    include("config.php");
     // declare properties as inputs, after trimming whitespace
     $fname = trim($_POST["fname"]);
     $lname = trim($_POST["lname"]);
@@ -36,4 +36,3 @@ function signUp() {
             exit();
         }
     }
-}

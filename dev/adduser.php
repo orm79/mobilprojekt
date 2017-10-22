@@ -35,39 +35,39 @@ $thisPage = "Registrera användare";
 
   <h1 class="is-size-4 is-uppercase<">Lägg till ny användare</h1>
   <br>
-  <form action="adduser.php" method="post" class="box">
+  <div class="box">
     <div class="field">
       <label class="label">Förnamn</label>
       <div class="control">
-        <input class="input" id="fname" name="fname" type="text" placeholder="Förnamn">
+        <input class="input" id="fname" type="text" placeholder="Förnamn">
       </div>
     </div>
     
     <div class="field">
       <label class="label">Efternamn</label>
       <div class="control">
-        <input class="input" id="lname" name="lname" type="text" placeholder="Efternamn">
+        <input class="input" id="lname" type="text" placeholder="Efternamn">
       </div>
     </div>
 
     <div class="field">
       <label class="label">E-post</label>
       <div class="control">
-        <input class="input" id="email" name="email" type="email" placeholder="E-post">
+        <input class="input" id="email" type="email" placeholder="E-post">
       </div>
     </div>
 
     <div class="field">
       <label class="label">Lösenord</label>
       <div class="control">
-        <input class="input" id="pass1" name="pass1" type="password" placeholder="Lösenord">
+        <input class="input" id="pass1" type="password" placeholder="Lösenord">
       </div>
     </div>
 
     <div class="field">
       <label class="label">Upprepa lösenord</label>
       <div class="control">
-        <input class="input" id="pass2" name="pass2" type="password" placeholder="Upprepa lösenord">
+        <input class="input" id="pass2" type="password" placeholder="Upprepa lösenord">
       </div>
     </div>
 
@@ -84,16 +84,17 @@ $thisPage = "Registrera användare";
 
       <div class="field">
         <div class="control">
-          <input type="submit" class="button is-primary is-medium" id="formButton" name="form-button" value="SKICKA"></input>
+          <button class="button is-primary is-medium" id="formButton">SKICKA</button>
         </div>
       </div>
-      </form>
+      </div>
 
       <br />
 
 
       <div id="userMsgSection">
       <?php
+      /*
       if(isset($_POST["form-button"])) {
         $msg = signUp();
         unset($_POST["form-button"]);
@@ -105,6 +106,7 @@ $thisPage = "Registrera användare";
           <button class='delete' id='userMsgDel'></button>" . $msg . "</div>";
         }
       }
+      */
       ?>
 </div>
 
