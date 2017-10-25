@@ -34,9 +34,9 @@ class User {
 
 
     /**
-    * Get user first and last name
-    * 
-    * @return array Associative array
+    * Get logged in users first and last name
+    *
+    * @return string  Json formatted string with data
     */    
     public function get_name() {
         $email = $_SESSION["sess_id"];
@@ -48,26 +48,123 @@ class User {
         $this -> db -> query($query);
 
         $result = $this -> db -> result_set();
-            return $result;
+            return json_encode($result);
     }	
 
+
     /**
-    * Get user type admin (true or false)
+    * Get specific user from email
+    * 
+    * @param email    User email
+    *
+    * @return string  Json formatted string with data
+    */    
+    public function get_user($email) {
+        
+        $query = "SELECT * 
+                  FROM users 
+                  WHERE email = '" . $email . "'";
+        
+        $this -> db -> query($query);
+
+        $result = $this -> db -> result_set();
+            return json_encode($result);
+    }
+
+
+    /**
+    * Delete user from mail
+    * 
+    * @param email    User email
+    * 
+    * @return boolean 
+    */    
+    public function del_user($email) {
+        
+        $query = "DELETE
+                  FROM users 
+                  WHERE email = '" . $email . "'";
+
+        $this -> db -> query($query);
+
+        if(($this -> db -> rowCount()) > 0) {
+            
+            return "true";
+            exit();
+        } else {
+            return "false";
+            exit();
+        } 	
+    }
+
+    /**
+    * Get user admin status
     * 
     * @return int 0 or 1
     */    
     public function get_admin() {
-      $email = $_SESSION["sess_id"];
+        $email = $_SESSION["sess_id"];
 
-      $query = "SELECT admin 
-                FROM users 
-                WHERE email = '" . $email . "'";
-      
-      $this -> db -> query($query);
+        $query = "SELECT admin 
+                  FROM users 
+                  WHERE email = '" . $email . "'";
 
-      $result = $this -> db -> result();
-          return $result;
-  }	
+        $this -> db -> query($query);
+
+        $result = $this -> db -> result();
+            return $result;
+    }	
+
+
+    /**
+    * Update user admin status
+    *
+    * @param $email    string  User email   
+    * 
+    *
+    * @return string   true or false
+    */    
+    public function update_admin($email) {
+        $update_to;
+        
+
+        $query = "SELECT admin
+                   FROM users
+                   WHERE email = :mail";
+        
+        $this -> db -> query($query);
+
+        $this -> db -> bind(":mail", $email);
+
+        $result = $this -> db -> result();
+        
+        if($result["admin"] == 1) {
+            $update_to = 0;
+        } else {
+            $update_to = 1;
+        }
+        
+        $query = "UPDATE users 
+                  SET admin = :admin
+                  WHERE email = :email";
+
+        $this -> db -> query($query);
+
+        $this -> db -> bind(":email", $email);
+        $this -> db -> bind(":admin", $update_to);
+        
+        $result = $this -> db -> result();
+
+        if(($this -> db -> rowCount()) > 0) {
+            
+            return "true";
+            exit();
+        } else {
+            return "false";
+            exit();
+        } 
+    }    
+
 
     /**
     * Login database query via prepared statement
@@ -163,19 +260,20 @@ class User {
     /**
     * Get all registered users
     *
-    * @return array  Associative array with all users data
+    * @return string  Json formatted string with data
     */    
-    public function all_users() {
+    public function all_users($sort_by = "lname ASC") {
         // the query
         $query = "SELECT email, fname, lname, added 
-                  FROM users";
+                  FROM users
+                  ORDER BY $sort_by";
                   
         // prepare statement
         $this -> db -> query($query);
 
         // execute query and get result set
         $result = $this -> db -> result_set(); 
-        return $result;
+        return json_encode($result);
         exit();
     }
 

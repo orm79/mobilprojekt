@@ -40,14 +40,14 @@
           </span> Användare
         </div>
         <div id="moreDropdown" class="navbar-dropdown">
-          <a class="navbar-item " href="https://bulma.io/made-with-bulma/">
+          <a class="navbar-item " href="userlist.php">
             <p>
               <strong>Användarlista</strong>
               <br>
               <small>Alla registrerade användare</small>
             </p>
           </a>
-          <a class="navbar-item " href="https://bulma.io/extensions/">
+          <a class="navbar-item " href="adduser.php">
             <p>
               <strong>Ny användare</strong>
               <br>
@@ -63,14 +63,14 @@
           </span>Rum
         </div>
         <div id="moreDropdown" class="navbar-dropdown">
-          <a class="navbar-item " href="https://bulma.io/made-with-bulma/">
+          <a class="navbar-item " href="roomlist.php">
             <p>
               <strong>Statuslista</strong>
               <br>
               <small>Se status för alla rum</small>
             </p>
           </a>
-          <a class="navbar-item " href="https://bulma.io/extensions/">
+          <a class="navbar-item " href="addroom.php">
             <p>
               <strong>Nytt rum</strong>
               <br>

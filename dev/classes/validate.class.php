@@ -32,28 +32,53 @@ class Validate {
         switch(false) {
             // check for valid first name
             case (preg_match("/^[a-öA-Ö\-\s]{2,}$/", $this -> fname)):
-                $valid = "Ogiltiga tecken i förnamn";
+                $valid = "fnameErr";
                 return $valid;
                 break;
             // check for valid last name
             case (preg_match("/^[a-öA-Ö\-\s]{2,}$/", $this -> lname)):
-                $valid = "Ogiltiga tecken i efternamn";
+                $valid = "lnameErr";
                 return $valid;
                 break;
             // check mail for correct format
             case (preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", $this -> email)):
-                $valid = "Ogiltig e-post adress";
+                $valid = "emailErr";
                 return $valid;
                 break;
             // check password 4 characters min length, can contain special chars !@#$%
             case (preg_match("/^(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{4,50}$/", $this -> pass)):
-                $valid = "Ogiltigt lösenord! endast A-Z 0-9 !@#$%";
+                $valid = "passErr2";
                 return $valid;
                 break;
             // return "valid" string if all input passes validation
             default: 
                 $valid = "valid";
                 return $valid;          
+        }
+    }
+
+
+    /**
+    * Validates new room input 
+    * 
+    * @param string $nr          Room number input
+    *
+    * @return string $valid      Return fail or success string
+    */    
+    public function room($nr) {
+        
+        $this -> nr = $nr;
+        
+        // check inputs against regex and return string
+        
+        if(!(preg_match("/^[0-9]{3}$/", $this -> nr))) {
+        
+            $valid = "nrErr";
+            return $valid;
+        } else {
+
+            $valid = "valid";
+            return $valid;          
         }
     }
 } 

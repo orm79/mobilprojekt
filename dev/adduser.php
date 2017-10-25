@@ -5,7 +5,6 @@
 $thisPage = "Registrera användare";
   include("includes/head.inc.php");
   include("includes/nav.inc.php");
-  include("functions/signup.func.php");
 
   $fname = "";
   $lname = "";
@@ -17,9 +16,9 @@ $thisPage = "Registrera användare";
   }
 ?>
 <section class="hero is-primary is-bold">
-  <div class="hero-body">
+  <div class="hero-body has-text-centered">
     <div class="container">
-      <h1 class="title">
+      <h1 class="title is-size-2">
         Registrering
       </h1>
       <h2 class="subtitle">
@@ -38,53 +37,73 @@ $thisPage = "Registrera användare";
   <div class="box">
     <div class="field">
       <label class="label">Förnamn</label>
-      <div class="control">
-        <input class="input" id="fname" type="text" placeholder="Förnamn">
+      <div class="control has-icons-left">
+        <input class="input" id="fname" type="text" placeholder="Förnamn" required>
+        <span class="icon is-small is-left">
+          <i class="fa fa-user"></i>
+        </span>  
       </div>
+      <p class="help is-danger" id="fnameHelp"></p>
     </div>
     
     <div class="field">
       <label class="label">Efternamn</label>
-      <div class="control">
-        <input class="input" id="lname" type="text" placeholder="Efternamn">
+      <div class="control has-icons-left">
+        <input class="input" id="lname" type="text" placeholder="Efternamn" required>
+        <span class="icon is-small is-left">
+          <i class="fa fa-user"></i>
+        </span>
       </div>
+      <p class="help is-danger" id="lnameHelp"></p>
     </div>
 
     <div class="field">
       <label class="label">E-post</label>
-      <div class="control">
-        <input class="input" id="email" type="email" placeholder="E-post">
+      <div class="control has-icons-left">
+        <input class="input" id="email" type="email" placeholder="E-post" required>
+        <span class="icon is-small is-left">
+          <i class="fa fa-envelope"></i>
+        </span>
       </div>
+      <p class="help is-danger" id="emailHelp"></p>
     </div>
 
     <div class="field">
       <label class="label">Lösenord</label>
-      <div class="control">
-        <input class="input" id="pass1" type="password" placeholder="Lösenord">
+      <div class="control has-icons-left">
+        <input class="input" id="pass1" type="password" placeholder="Lösenord" required>
+        <span class="icon is-small is-left">
+          <i class="fa fa-lock"></i>
+        </span>
       </div>
+      <p class="help is-danger" id="pass1Help"></p>
     </div>
 
     <div class="field">
       <label class="label">Upprepa lösenord</label>
-      <div class="control">
-        <input class="input" id="pass2" type="password" placeholder="Upprepa lösenord">
+      <div class="control has-icons-left">
+        <input class="input" id="pass2" type="password" placeholder="Upprepa lösenord" required>
+        <span class="icon is-small is-left">
+          <i class="fa fa-lock"></i>
+        </span>
       </div>
+      <p class="help is-danger" id="pass2Help"></p>
     </div>
-
+    <br>
     <div class="field">
-      <div class="control">
+      <div class="control">  
         <label class="checkbox">
           <input type="checkbox" name="admin">
-            Användaren ska vara administratör</a>
+          Användaren ska vara administratör
         </label>
-      </div>
+      </div>  
     </div
-
-      <br />
+      <br>
+      <br>
 
       <div class="field">
         <div class="control">
-          <button class="button is-primary is-medium" id="formButton">SKICKA</button>
+          <button class="button is-primary is-medium" id="userFormButton">SKICKA</button>
         </div>
       </div>
       </div>
@@ -128,7 +147,7 @@ $thisPage = "Registrera användare";
 
       <div class="field">
         <label class="label">Efternamn</label>
-        <div class="control has-icons-left has-icons-right">
+        <div class="control has-icons-right">
           <input class="input is-danger" type="text" placeholder="Efternamn">
           <span class="icon is-small is-left">
             <i class="fa fa-user"></i>

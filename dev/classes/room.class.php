@@ -7,13 +7,7 @@
  */
 class Room {
 
-  private $db,
-          $nr,
-          $status,
-          $upd_time,
-          $upd_user,
-          $info,
-          $comment;
+  private $db;
 
   /**
 	* Constructor for Room class
@@ -27,17 +21,13 @@ class Room {
    * Add new room
    *
    * @param $nr        string     Room number
-   * @param $status    int        Room cleaning status 1 or 0  
+   * @param $status    string     Room cleaning status  
    * @param $info      string     Information about room
    * @param $comment   string     Comment about room 
    *
-   * @return bool true / false
+   * @return string "true" / "false"
    */ 
-  public function add_room($nr, $status, $info = "", $comment = "") {
-    $this -> nr      = $nr;
-    $this -> status  = $status;
-    $this -> info    = $info;
-    $this -> comment = $comment;
+  public function add_room($nr, $info, $comment, $status) {
     
     //check that room nr isn't already in table
     $query = "SELECT nr
@@ -45,7 +35,8 @@ class Room {
               WHERE nr = :nr";
     
     $this -> db -> query($query);
-    $this -> db -> bind(":nr, $nr");
+    $this -> db -> bind(":nr", $nr);
+    
     $result = $this -> db -> result();
 
     if($result) {
@@ -55,47 +46,47 @@ class Room {
     }
 
     //if room nr is not in table 
-    $query = "INSERT INTO rooms (nr, status, info, comment)
-              VALUES (:nr, :status, :info, :comment)";
+    $query = "INSERT INTO rooms (nr, info, comment, status)
+              VALUES (:nr, :info, :comment, :status)";
     
     $this -> db -> query($query);
-    $this -> db -> bind(":nr", $this -> nr);
-    $this -> db -> bind(":status", $this -> status);
-    $this -> db -> bind(":info", $this -> info);
-    $this -> db -> bind(":comment", $this -> comment);
+    $this -> db -> bind(":nr", $nr);
+    $this -> db -> bind(":info", $info);
+    $this -> db -> bind(":comment", $comment);
+    $this -> db -> bind(":status", $status);
     
     $this -> db -> execute();
     
     if(($this -> db -> rowCount()) > 0) {
-      return true;
+      return "true";
     } else {
-      return false;
+      return "false";
     }  
   }  
   
 
   /**
-   * Delete a room
-   *
-   * @param $nr  string     Room number
-   *
-   * @return bool true / false
-   */
-  public function delete_room($nr) {
-    $this -> nr = $nr;
-    
+  * Delete a room
+  *
+  * @param $nr  string     Room number
+  *
+  * @return string "true" / "false"
+  */
+  public function del_room($nr) {
+        
     $query = "DELETE FROM rooms
               WHERE nr = :nr";
+    
     $this -> db -> query($query);
     
-    $this -> db -> bind(":nr", $this -> nr);
+    $this -> db -> bind(":nr", $nr);
     
     $this -> db -> execute();
     
     if(($this -> db -> rowCount()) > 0) {
-     return true;
+     return "true";
     } else {
-      return false;
+      return "false";
     }
   }
   
@@ -105,7 +96,7 @@ class Room {
   *
   * @return array    Associative array with all rooms data
   */
-  public function get_all_rooms() {
+  public function all_rooms() {
         
     $query = "SELECT *
               FROM rooms";
@@ -113,7 +104,7 @@ class Room {
     $this -> db -> query($query);
 
     $result = $this -> db -> result_set();
-    return $result;
+    return json_encode($result);
     exit();
   }  
   
@@ -126,6 +117,7 @@ class Room {
   * @return array  Result as associative array
   */
   public function get_room($nr) {
+    
     $this -> nr = $nr;
     
     $query = "SELECT *
@@ -137,8 +129,37 @@ class Room {
     $this -> db -> bind(":nr", $this -> nr);
 
     $result = $this -> db -> result();
-      
     return $result;
+    exit();
+  }
+
+
+  /**
+  * Update room info
+  *
+  * @param $nr      string     Room number
+  * @param $info    string     Room information  
+  *
+  * @return string "true" / "false"
+  */
+  public function update_info($nr, $info) {
+    
+    $query = "UPDATE rooms
+              SET info = :info
+              WHERE nr = :nr";
+    
+    $this -> db -> query($query);
+    
+    $this -> db -> bind(":nr", $nr);
+    $this -> db -> bind(":info", $info);
+    
+    $this -> db -> execute();
+   
+    if(($this -> db -> rowCount()) > 0) {
+     return "true";
+    } else {
+      return "false";
+    }
   }
 
 
@@ -148,26 +169,28 @@ class Room {
   * @param $nr        string     Room number
   * @param $status    int        Room cleaning status 1 or 0  
   *
-  * @return bool true / false
+  * @return string "true" / "false"
   */
   public function change_status($nr, $status) {
-    $this -> nr      = $nr;
-    $this -> status  = $status;
+    
     $user = $_SESSION["sess_id"];
     
     $query = "UPDATE rooms
-              SET status = :status, upd_time = NOW(), upd_user = '" . $user . "'
+              SET status = :status, upd_time = NOW(), upd_user = :user
               WHERE nr = :nr";
     
     $this -> db -> query($query);
-    $this -> db -> bind(":nr", $this -> nr);
-    $this -> db -> bind(":status", $this -> status);
+    
+    $this -> db -> bind(":nr", $nr);
+    $this -> db -> bind(":status", $status);
+    $this -> db -> bind(":user", $user);
+    
     $this -> db -> execute();
    
     if(($this -> db -> rowCount()) > 0) {
-     return true;
+     return "true";
     } else {
-      return false;
+      return "false";
     }
   }
   
