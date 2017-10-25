@@ -48,7 +48,7 @@ class User {
         $this -> db -> query($query);
 
         $result = $this -> db -> result_set();
-            return json_encode($result);
+            return $result;
     }	
 
 
@@ -77,22 +77,25 @@ class User {
     * 
     * @param email    User email
     * 
-    * @return boolean 
+    * @return string  "yes" or "no"
     */    
     public function del_user($email) {
         
         $query = "DELETE
                   FROM users 
-                  WHERE email = '" . $email . "'";
+                  WHERE email = :email";
 
         $this -> db -> query($query);
+        $this -> db -> bind(":email", $email);
+
+        $this -> db -> execute();
 
         if(($this -> db -> rowCount()) > 0) {
             
-            return "true";
+            return "yes";
             exit();
         } else {
-            return "false";
+            return "no";
             exit();
         } 	
     }
@@ -122,12 +125,11 @@ class User {
     * @param $email    string  User email   
     * 
     *
-    * @return string   true or false
+    * @return string   yes or no
     */    
     public function update_admin($email) {
         $update_to;
         
-
         $query = "SELECT admin
                    FROM users
                    WHERE email = :mail";
@@ -157,10 +159,10 @@ class User {
 
         if(($this -> db -> rowCount()) > 0) {
             
-            return "true";
+            return $update_to;
             exit();
         } else {
-            return "false";
+            return "no";
             exit();
         } 
     }    
@@ -264,7 +266,7 @@ class User {
     */    
     public function all_users($sort_by = "lname ASC") {
         // the query
-        $query = "SELECT email, fname, lname, added 
+        $query = "SELECT email, fname, lname, admin, added 
                   FROM users
                   ORDER BY $sort_by";
                   

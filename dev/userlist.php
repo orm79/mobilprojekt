@@ -23,27 +23,20 @@ $thisPage = "Användarlista";
   <div class="container">
     <div class="column is-10 is-offset-1">
 
-      <h3 class="is-size-5 is-uppercase">Användare</h3>
-      <br>
-    
-      <table class="table is-fullwidth is-striped is-hoverable">
-        
+      <table class="table is-fullwidth">
         <thead>
           <tr>
-            <th>Efternamn</th>
-            <th>Förnamn</th>
+            <th class="is-hidden-mobile">Efternamn</th>
+            <th class="is-hidden-mobile">Förnamn</th>
             <th>E-post</th>
             <th>Admin</th>
             <th></th>
           </tr>
         </thead>
-
         <tbody id="userTable">
 
         </tbody>
-      
       </table>    
-    
     </div>
   </div>
 </section>

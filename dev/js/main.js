@@ -294,29 +294,33 @@ var users = {
     
     //when function is done successfully
     result.done(function(data) {
-      
+    console.log(data);  
       var content;
       
       for(var i=0; i < data.length; i++) {
-        content += '<tr>\n' + 
-                      '<th>' + data[i].lname + '</th>\n' +
-                      '<td>' + data[i].fname + '</td\n>' +
+        
+        var adminClass = 'class=" "';
+        var adminCheck = '';
+        
+        if (data[i].admin == "1") {
+          adminClass =  'class="is-selected"';
+          adminCheck = 'checked';
+        }
+
+        content += '<tr id="row-' + data[i].email + '" ' + adminClass + '>\n' + 
+                      '<th class="is-hidden-mobile">' + data[i].lname + '</th>\n' +
+                      '<td class="is-hidden-mobile">' + data[i].fname + '</td\n>' +
                       '<td>' + data[i].email + '</td\n>' +
                       '<td>\n' +
                         '<label class="checkbox">\n' + 
-                          '<input type="checkbox">\n' +
+                          '<input type="checkbox" id="adm-' + data[i].email + '" ' + adminCheck + '>\n' +
                           'Admin\n' + 
                         '</label>\n' +
                       '</td>\n' +
                       '<td>\n' +
-                        '<a class="button is-danger is-outlined" id="edit-' + data[i].email + '">' + 
-                          '<span>\n' + 
+                        '<button class="button is-warning" id="del-' + data[i].email + '">' + 
                             'Radera\n' +
-                          '</span>\n' +
-                          '<span class="icon is-small"\n>' + 
-                            '<i class="fa fa-times"></i>\n' +
-                          '</span>\n' +
-                        '</a>\n' +
+                        '</button>\n' +
                       '</td>\n' +
                     '</tr>\n\n';
       };
@@ -358,9 +362,17 @@ var users = {
         }, 'text', 'users.script.php');
         
         result.done(function(data) {
+          // id of the row
+          var rowID = 'row-' + email;
           
-          console.log(data);
-          
+          if (data == "yes") {
+            // using vanilla js because jquery struggles with @ and . in id
+            document.getElementById(rowID).className = 'is-hidden';
+        
+            utils.notification('Användaren med e-post <strong>' + email + ' </strong>är borttagen.')
+          } else {
+            utils.notification('Något gick fel, prova igen senare.');
+          }
         }).fail(function(jqXHR, textStatus, errorThrown) {
           console.log(textStatus + ': ' + errorThrown);
         });
@@ -368,25 +380,61 @@ var users = {
 
   // Update user admin status
   //--------------------------------------------------//
-  admin: function(email) {
+  admin: function(fullID) {
     
+        // remove extra characters at beginning
+        var email = fullID.substr(4);
+        
+        var checkBoxes = document.getElementsByTagName('input').disabled = true;
+        for (var i = 0; i < checkBoxes.length; i++) {
+          checkBoxes[i].disabled = true;
+        }
+
         var result = users.ajaxCall({
           "func": "update_admin",
           "email": email
         }, 'text', 'users.script.php');
         
         result.done(function(data) {
-          console.log(data);
-          return(data);
+          
+          rowID = 'row-' + email;
+
+          if (data == '1') {
+            
+            document.getElementById(fullID).setAttribute('checked', true);
+              
+            document.getElementById(rowID).className = 'is-selected';
+
+            utils.notification('Admin status för ' + email + ' har uppdaterats.');
+
+              
+              
+          } else if (data == '0') {
+            document.getElementById(fullID).setAttribute('checked', false);
+            document.getElementById(rowID).className = ' ';
+
+            utils.notification('Admin status för ' + email + ' har uppdaterats.');
+          } else {
+            
+              utils.notification('Något gick fel, prova igen senare.');
+          }          
+          
+          setTimeout(function() {
+            var checkBoxes = document.getElementsByTagName('input').disabled = true;
+            for (var i = 0; i < checkBoxes.length; i++) {
+              checkBoxes[i].disabled = false;
+            }   
+          }, 5000);
           
         }).fail(function(jqXHR, textStatus, errorThrown) {
           console.log(textStatus + ': ' + errorThrown);
         });
       }
-
-
 }
 
+
+// Listening for: "New user" form button press
+//----------------------------------------------------//
 $('body').on('click', '#userFormButton', function(e) {
   users.add();
   $('#fnameHelp, #lnameHelp, #emailHelp, #pass1Help, #pass2Help').html("");
@@ -395,11 +443,61 @@ $('body').on('click', '#userFormButton', function(e) {
 });
 
 $('body').on('click', '#testbutton', function(e) {
-  users.admin("ben@boj.se");
+  var mittID = "daniel@olsson.se";
+  document.getElementById(mittID).innerHTML = "hej";
   //$('#testdiv').html('<p>Adminstatus för ben@boj.se: ' + result + '</p>');
 });
+
+// Listening for: "Delete user" button press
+//----------------------------------------------------//
+$('body').on('click', '#userTable button', function(e) {
+  // get full id of clicked button
+  var fullID = e.target.id;
+  // remove extra characters at beginning
+  var theID = fullID.substr(4);
+  // call the delete method with theID 
+  users.delete(theID);
+});
+
+// Listening for: "Admin" checkbox change
+//----------------------------------------------------//
+$('body').on('change', '#userTable input[type="checkbox"]', function(e) {
+  // get full id of change checkbox
+  var fullID = e.target.id;
+  console.log(fullID);
+  // call the admin method with fullID 
+  users.admin(fullID);
+});
+
+
 
 // $('body').on('click', '#testbutton', function(e) {
 //   users.delete("lennart@svensk.se");
   
 // });
+
+
+// Object containing utility methods
+//----------------------------------------------------//
+var utils = {
+  
+  
+  // Bottom right notification 
+  //--------------------------------------------------//
+  notification: function(message) {
+    
+    // grab the elements to be used
+    var notDiv = $('#notDiv');
+    var notDivMsg = $('#notDivMsg');
+    var notMsg = $('#notMsg');
+    // put the message passed into the div
+    notMsg.html(message);
+    // fade div in, pause, fade out then remove message
+    notDiv.fadeIn(1200)
+      .delay(2000)
+      .fadeOut(1200, function(){
+        notMsg.html('');
+      });
+  }
+
+}

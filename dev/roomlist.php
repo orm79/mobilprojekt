@@ -18,23 +18,26 @@
 
 <section class="section">
   <div class="container">
+    <div class="column is-10 is-offset-1">
+  
+      <table class="table is-fullwidth is-hoverable">
+        <thead>
+          <tr>
+            <th>Rum</th>
+            <th class="is-hidden-mobile">Kommentar</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="roomTable">
 
-  <table class="table is-fullwidth is-hoverable">
-  <thead>
-    <tr>
-      <th>Rum</th>
-      <th class="is-hidden-mobile">Kommentar</th>
-      <th>Status</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="roomTable">
-
-  </tbody>
-</table>
-
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
+
+
 
 <script>
 // Display table with all rooms
