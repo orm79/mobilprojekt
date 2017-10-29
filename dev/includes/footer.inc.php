@@ -12,8 +12,18 @@
   <!-- main javascript file -->
   <script src="js/main.js"></script>
 
-  <div class="box not-div" id="notDiv">
-    <p id="notMsg"></p>
+  <div class="box not-div" id="notSuccDiv">
+    <p id="notSuccMsg"></p>
+    <span class="icon" id="infoIcon"><i class="fa fa-info-circle fa-lg"></i></span>
+  </div>
+  
+  <div class="box not-div" id="notErrDiv">
+    <p id="notErrMsg"></p>
+    <span class="icon" id="infoIcon"><i class="fa fa-info-circle fa-lg"></i></span>
+  </div>
+
+  <div class="box not-div" id="notInfoDiv">
+    <p id="notInfoMsg"></p>
     <span class="icon" id="infoIcon"><i class="fa fa-info-circle fa-lg"></i></span>
   </div>
 </body>

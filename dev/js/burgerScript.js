@@ -1,6 +1,6 @@
 
-// BurgerMenu
-//-- Object containing methods for the mobile burger menu
+// Object containing methods for the mobile burger menu
+//----------------------------------------------------//
 
 burgerMenu = {
   

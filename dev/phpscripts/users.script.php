@@ -67,30 +67,6 @@ switch ( $func ) {
             $result = $user -> update_admin($email);
             echo $result;
             break;
-            
+           
         
 }
-
-    // if(!($pass1 === $pass2)) {
-    //     $msg = "passErr1";
-    //     echo $msg;
-    //     exit();
-    // } else {
-    //     // new instance of Validate class
-    //     $validate = new Validate();
-    //     // call Validate::signup with first name/last name/email/password parameters
-    //     $valid = $validate -> signup($fname, $lname, $email, $pass1);
-    //     // if the returned string is not "valid" return the failure message
-    //     if ($valid !== "valid") {
-    //         echo $valid;
-    //         exit();
-    //     } else {
-    //         // else create a new instance of User class
-    //         $user = new User();
-    //         // call User::signup with first name/last name/pass/email parameters
-    //         $signup = $user -> signup($fname, $lname, $pass1, $email, $admin);
-    //         // return account successfully created message
-    //         echo $signup;
-    //         exit();
-    //     }
-    // }

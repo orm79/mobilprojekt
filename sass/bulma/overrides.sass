@@ -2,26 +2,82 @@
   max-width: 720px
   margin: 0 auto
 
-$pink: #7FADA9
-$pink-invert: #ffffff
+/* Custom primary color */
+$main: hsl(245, 100%, 96%)
+$main-invert: hsl(0, 0%, 29%) 
 
-$primary: $pink
-$primary-invert: $pink-invert
+$primary: $main
+$primary-invert: $main-invert
 
-#notDiv
+$card-background-color: white
+
+/* screen reader only class */
+.sr-only
+  position: absolute
+  width: 1px
+  height: 1px
+  padding: 0
+  margin: -1px
+  overflow: hidden
+  clip: rect(0, 0, 0, 0)
+  border: 0
+
+/* Room card rules */
+#cardList
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+
+.card
+  min-width: 300px !important
+  
+.card-header
+  background-color: hsl(0, 0%, 96%)
+  
+
+/* Notification div rules */
+div.not-div
   position: fixed
   display: none
   right: 20px
   bottom: 20px
   z-index: 3000
   width: 300px
-  background-color: $pink
-  color: $pink-invert
 
   #infoIcon 
     position: absolute
     top: 5px
     right: 5px
 
-td > a 
-  z-index: 10000
+/* Notification colors */
+div#notSuccDiv
+  background-color: hsl(141, 71%, 48%)
+  color: #ffffff
+
+div#notErrDiv
+  background-color: hsl(348, 100%, 61%)
+  color: #ffffff
+
+div#notInfoDiv
+  background-color: hsl(204, 86%, 53%)
+  color: #ffffff
+
+.divider
+  display: none
+
+/* Responsive hero bg image, different size depening on window size */
+.has-bg-img
+  background: url("../img/hero-img-lg.jpg")
+  background-size: cover
+
+@media only screen and (max-width: 1215px)
+  .has-bg-img
+    background: url("../img/hero-img-md.jpg")
+
+
+@media only screen and (max-width: 768px) 
+  .has-bg-img
+    background: url("../img/hero-img-sm.jpg")
+  .divider
+    display: block
+

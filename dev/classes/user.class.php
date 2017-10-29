@@ -289,5 +289,6 @@ class User {
 		session_destroy();
 		Redirect::to("index.php");
 		exit();
-	}      
+    }  
+
 }

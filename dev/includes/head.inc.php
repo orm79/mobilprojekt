@@ -1,6 +1,6 @@
 <?php
-  session_start();
-  include("config.php");
+session_start();
+include("config.php");
 ?>
 <!DOCTYPE html>
 <html lang="sv">
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- jQuery CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <title>Hotell Lyx</title>
+  <title> <?= $siteTitle . $divider . $thisPage ?>  </title>
 </head>
 
 <body>

@@ -1,6 +1,6 @@
 
-// BurgerMenu
-//-- Object containing methods for the mobile burger menu
+// Object containing methods for the mobile burger menu
+//----------------------------------------------------//
 
 burgerMenu = {
   
@@ -33,159 +33,422 @@ burgerMenu = {
 }
 
 burgerMenu.toggle();
+// Event listeners for the application
+// Author: Daniel Olsson <orol1600@student.miun.se>
+//----------------------------------------------------//
 
-// newUserMsg
-//-- Object containing methods related to the error/success messages
-//-- on the register new users page.
+// Listening for: "Add user" form button press
+//----------------------------------------------------//
+$('body').on('click', '#userFormButton', function(e) {
+  e.preventDefault();
+  users.add();
+  $('#fnameHelp, #lnameHelp, #emailHelp, #pass1Help, #pass2Help').html("");
+  $('#fname, #lname, #email, #pass1, #pass2').removeClass('is-danger');
+  
+});
 
-var newUser = {
+// Listening for: "Delete user" button press
+//----------------------------------------------------//
+$('body').on('click', '#userTable button', function(e) {
+  // get full id of clicked button
+  var fullID = e.target.id;
+  // remove extra characters at beginning
+  var theID = fullID.substr(4);
+  // call the delete method with theID 
+  users.delete(theID);
+});
 
-  errMsgClose: function() {
-    //delete message div if x-button is pressed
-    $('body').on('click', '#userMsgDel', function(e) {
+// Listening for: "Admin" checkbox change
+//----------------------------------------------------//
+$('body').on('change', '#userTable input[type="checkbox"]', function(e) {
+  // get full id of change checkbox
+  var fullID = e.target.id;
+  // call the admin method with fullID 
+  users.admin(fullID);
 
-      var messageSection = document.getElementById('userMsgSection');
-      var messageDiv = document.getElementById('userMsg');
+  // set checkboxes disabled while notification is displaying
+  // to avoid breaking the animations
+  var checkBoxes = document.getElementsByTagName('input');
+  
+  for (var i = 0; i < checkBoxes.length; i++) {
+    checkBoxes[i].disabled = true;
+  };
 
-      messageSection.removeChild(messageDiv);
+  setTimeout(function() {
+    checkBoxes = document.getElementsByTagName('input');
+    
+    for (var i = 0; i < checkBoxes.length; i++) {
+      checkBoxes[i].disabled = false;
+    }   
+  }, 4000);
+});
 
-    });
-  }
+// Listening for: "Add room" form button press
+//----------------------------------------------------//
+$('body').on('click', '#roomFormButton', function(e) {
+  e.preventDefault();
+  rooms.add_room();
+  $('#roomNrHelp').html(' ');
+  $('#roomNr').removeClass('is-danger');
+  
+});
 
+// Listening for: "Edit room" button press
+//----------------------------------------------------//
+$('body').on('click', '#roomTable button', function(e) {
+  // get full id of clicked button
+  var fullID = e.target.id;
+  
+  // remove extra characters at beginning
+  var theID = fullID.substr(5);
+  
+  // call the delete method with theID 
+  rooms.openEdit(theID);
+
+  // call the listener for closing modal
+  listenModClose();
+});
+
+// Listening for: "Edit card" button press
+//----------------------------------------------------//
+$('body').on('click', '.cardEditLink', function(e) {
+  // get full id of clicked button
+  var fullID = e.target.id;
+  
+  // remove extra characters at beginning
+  var theID = fullID.substr(9);
+  
+  // call the delete method with theID 
+  rooms.openEdit(theID);
+
+  // call the listener for closing modal clicks
+  listenModClose();
+});
+
+// Adds eventlistener for close modal clicks
+//----------------------------------------------------//
+var listenModClose = function () {
+
+  $('body').on('click', '#modCloseBtn, #modCancelBtn, .modal-background', function() {
+    document.getElementById('modDiv').className = 'modal';
+    document.getElementById('roomNr').innerHTML = '';
+    document.getElementById('modRoomInfo').value = '';
+    document.getElementById('modRoomCom').value = '';
+    document.getElementById('modStatus').value = '';
+    document.getElementById('modUser').innerHTML = '';
+    document.getElementById('modDate').innerHTML = '';
+  });
 };
 
-newUser.errMsgClose();
+// Listening for: "Save" modal button press
+//----------------------------------------------------//
+$('body').on('click', '#modSaveBtn', function(e) {
+  e.preventDefault();
+  rooms.saveEdit();
+});
+
+// Listening for: "Cleaning done" link on card
+//----------------------------------------------------//
+$('body').on('click', '.cardDoneLink', function(e) {
+  
+  var upd_user = document.getElementById('modUserEmail').innerHTML;
+  var status = 1;
+  
+  // get full id of clicked button
+  var fullID = e.target.id;
+  
+  // remove extra characters at beginning
+  var theID = fullID.substr(9);
+ 
+  rooms.changeStatus(theID, status, upd_user);
+});
+
+
+
 // Object containing room methods
+// Author: Daniel Olsson <orol1600@student.miun.se>
 //----------------------------------------------------//
 var rooms = {
   
-    // Ajax call, three params, returns promise
-    //--------------------------------------------------//
-    ajaxCall: function(theData, theType, theURL) {
-      //return $.get promise
-      return $.post({ 
-        data: theData,
-        dataType: theType,
-        url: 'phpscripts/' + theURL
-      });
-    }, 
-  
-    // Add new room from form inputs
-    //--------------------------------------------------//
-    add_room: function() {
-      
-      var nr      = $('#roomNr').val();
-      var info    = $('#roomInfo').val();
-      var comment = $('#roomCom').val();
-      var status  = $('#roomStatus').val();
-  
-      // run ajaxCall() with input data, datatype and URL
-      var result = rooms.ajaxCall({
-                     "nr": nr,
-                     "info": info,
-                     "comment": comment,
-                     "status": status,
-                     "func": "add_room"
-                   }, 'text', 'rooms.script.php');
-      
-      // when call is done and ok, process returned data string
-      result.done(function(data) {
-        
-        switch(data) {
-        
-        case 'nrErr':
-          $('#roomNr').addClass('is-danger');
-          $('#roomNrHelp').html('Felaktigt format, rum har tre siffror');
-          break;
+  // Ajax call, three params, returns promise
+  //--------------------------------------------------//
+  ajaxCall: function(theData, theType, theURL) {
+    //return $.get promise
+    return $.post({ 
+      data: theData,
+      dataType: theType,
+      url: 'phpscripts/' + theURL
+    });
+  }, 
 
-        case 'duplicate':
-          $('#roomNr').addClass('is-danger');
-          $('#roomNrHelp').html('Rumsnumret är redan registrerat');
-          break;
-
-        case 'false':
-          $('#userMsgSection').html(
-            '<div class="notification is-danger" id="userMsg">' +
-            '<button class="delete" id="userMsgDel"></button>' +
-            'Något gick fel, prova igen senare</div>');
-            break;
-
-        default:        
-          $('#roomNr, #roomInfo, #roomComment').val('');     
-          $('#userMsgSection').html(
-            '<div class="notification is-success" id="userMsg">' +
-            '<button class="delete" id="userMsgDel"></button>' +
-            'Rum med nummer ' + nr + 'har skapats</div>');
-        }
-      
-         // if the call is not successful
-      }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
-        // show a message that something went wrong
-        $('#userMsgSection').html(
-          '<div class="notification is-danger" id="userMsg">' +
-          '<button class="delete" id="userMsgDel"></button>' +
-          'Något gick fel, prova igen senare</div>'
-        );      
-      });
-    },
-
-    // Get all rooms data and list it in table
-    //--------------------------------------------------//
-    all: function() {
-
-      var result = rooms.ajaxCall({
-       "func": "all_rooms"
-      }, 'json', 'rooms.script.php');
+  // Add new room from form inputs
+  //--------------------------------------------------//
+  add_room: function() {
     
+    var nr      = $('#roomNr').val();
+    var info    = $('#roomInfo').val();
+    var comment = $('#roomCom').val();
+    var status  = $('#roomStatus').val();
+
+    // run ajaxCall() with input data, datatype and URL
+    var result = rooms.ajaxCall({
+                   "nr": nr,
+                   "info": info,
+                   "comment": comment,
+                   "status": status,
+                   "func": "add_room"
+                 }, 'text', 'rooms.script.php');
+    
+    // when call is done and ok, process returned data string
+    result.done(function(data) {
+      
+      switch(data) {
+      
+      case 'nrErr':
+        $('#roomNr').addClass('is-danger');
+        $('#roomNrHelp').html('Felaktigt format, rum har tre siffror');
+        $('#roomNr').focus();
+        break;
+      
+        case 'duplicate':
+        $('#roomNr').addClass('is-danger');
+        $('#roomNrHelp').html('Rumsnumret är redan registrerat');
+        $('#roomNr').focus();
+        break;
+      
+        case 'false':
+        utils.notification('error', 'Något gick fel, prova igen senare.');
+        $('#roomNr').focus();
+        break;
+      
+        default:        
+        $('#roomNr, #roomInfo, #roomComment').val('');     
+        $('#roomNr').focus();
+        utils.notification('success', 'Rum med nummer ' + nr + 'har lagts till.');
+        
+      }
+    
+       // if the call is not successful
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      // show a message that something went wrong
+      $('#roomNr').focus();
+      utils.notification("error", "Något gick fel, prova igen senare."); 
+      
+    });
+  },
+  
+  // Get all rooms data and list it in table
+  //--------------------------------------------------//
+  all: function() {
+    var result = rooms.ajaxCall({
+     "func": "all_rooms"
+    }, 'json', 'rooms.script.php');
+  
     //when function is done successfully
     result.done(function(data) {
-      console.log(data);
-      var content;
+    
+    var content;
+    // loop through all rooms in data and add to content variable
+    for(var i=0; i < data.length; i++) {
+    
+      var cleanStatus;  
+      var cleanClass;
+      // use the excerpt method to shorten the comment text if necessary
+      var comment = utils.excerpt(data[i].comment);
+      var rowID = 'row-' + data[i].nr;
       
-      for(var i=0; i < data.length; i++) {
-      
-        var cleanStatus;  
-        
-        if(data[i].status == "1") {
-          cleanStatus = "Städat";
-          } else {
-            cleanStatus = "Ostädat";
-          }
-
-        content += '<tr>\n' + 
+      if(data[i].status == '1') {
+        cleanStatus = 'Städat';
+        cleanClass = ''
+        } else {
+          cleanStatus = 'Ej städat';
+          cleanClass = 'is-selected';
+        }
+      content += '<tr id="' + rowID + '" class="' + cleanClass + '"' +'>\n' + 
                     '<th>' + data[i].nr + '</th>\n' +
-                    '<td class="is-hidden-mobile">' + data[i].comment + '</td\n>' +
+                    '<td class="is-hidden-mobile">' + comment + '</td\n>' +
                     '<td>' + cleanStatus + '</td\n>' +
                     '<td>\n' +
-                      '<a class="button is-primary is-outlined" id="edit-' + data[i].nr + '">' + 
-                        '<span>\n' + 
-                          'Redigera\n' +
+                      '<button class="button is-pulled-right" style="z-index: 20;" id="edit-' + data[i].nr + '">' + 
+                        '<span style="z-index: -15;">\n' + 
+                          'Redigera &nbsp;\n' +
+                          '<span class="icon is-small" style="z-index. -15;"\n>' + 
+                            '<i class="fa fa-pencil" aria-hidden="true"></i>\n' +
+                          '</span>\n' +
                         '</span>\n' +
-                        '<span class="icon is-small"\n>' + 
-                          '<i class="fa fa-pencil"></i>\n' +
-                        '</span>\n' +
-                      '</a>\n' +
+                      '</button>\n' +
                     '</td>\n' +
                   '</tr>\n\n';
-      };
-
-      $('#roomTable').html(content);
-      
-    //when we get an error
+    };
+    // add the content to the table 
+    $('#roomTable').html(content);
+    
+  //when we get an error
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus + ': ' + errorThrown);
+      utils.notification('error', 'Något gick fel vid hämtning av rumslista, prova igen senare.');
     });
-  }    
+  },
+
+  // Open the edit form modal
+  //--------------------------------------------------//
+  openEdit: function(nr) {
+    
+    var result = rooms.ajaxCall({
+      "func": "get_room",
+      "nr": nr
+      }, 'json', 'rooms.script.php');
+
+    result.done(function(data) {
+      
+      document.getElementById('roomNr').innerHTML = nr;
+      document.getElementById('modRoomNr').value = nr;
+      document.getElementById('modRoomInfo').value = data[0].info;
+      document.getElementById('modRoomCom').value = data[0].comment;
+      document.getElementById('modStatus').value = data[0].status;
+      document.getElementById('modUser').innerHTML = data[0].upd_user;
+      document.getElementById('modDate').innerHTML = data[0].upd_time;
+      document.getElementById('modDiv').className += " is-active";
+      
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      utils.notification('error', 'Något gick fel vid hämtning av rumslista, prova igen senare.');
+    });
+  },
+
+  // Save edited data from modal form
+  //--------------------------------------------------//
+  saveEdit: function() {
+
+    var nr       = document.getElementById('modRoomNr').value;
+    var info     = document.getElementById('modRoomInfo').value;
+    var comment  = document.getElementById('modRoomCom').value;
+    var status   = document.getElementById('modStatus').value;
+    var upd_user = document.getElementById('modUserEmail').innerHTML;
+    
+    $('#modSaveBtn').addClass('is-loading');
+    
+    var result = rooms.ajaxCall({
+      "func": "update_room",
+      "nr": nr,
+      "info": info,
+      "comment": comment,
+      "status": status,
+      "upd_user": upd_user
+      }, 'text', 'rooms.script.php');
+
+      result.done(function(data) {
+        
+        if (data === 'yes') {
+          
+          utils.notification('success', 'Rum #' + nr + ' har uppdaterats.');
+          
+          setTimeout(function() {
+            $('#modSaveBtn').removeClass('is-loading');
+          }, 2500);
+        
+          rooms.all();
+          rooms.cardList();
+        } else {
+          
+          utils.notification('error', 'Något gick fel, prova igen senare.');
+        }
+      }).fail(function(jqXHR, textStatus, errorThrown) {
+        utils.notification('error', 'Något gick fel vid uppdatering, prova igen senare.');
+      });
+  },
+
+  // List all roms in card form
+  //--------------------------------------------------//
+  cardList: function() {
+
+    var result = rooms.ajaxCall({
+      "func": "all_rooms"
+      }, 'json', 'rooms.script.php');
+   
+    //when function is done successfully
+    result.done(function(data) {
+    
+    var content = ' ';
+    
+    // loop through all rooms in data and add to content variable
+    for(var i=0; i < data.length; i++) {
+    
+      if(data[i].status === 0) {
+      
+      content += 
+
+        '<div class="column is-tablet">\n' +
+        '<div class="card" id="card-' + data[i].nr + '">\n' +
+        
+          '<header class="card-header">\n' +
+            '<p class="card-header-title">Rum #' + data[i].nr +'</p>\n' +
+            '<span class="card-header-icon has-text-danger">\n' + 
+              '<span class="icon">\n' + 
+                '<i class="fa fa-diamond" aria-hidden="true"></i>\n' +
+              '</span>\n' +
+            '</span>\n' +
+          '</header>\n' +  
+          
+          '<div class="card-content">\n' + 
+            '<div class="content">\n' +
+              '<h3 class="is-size-6"><strong>Information</strong></h3>\n' +
+              '<p>' + data[i].info +'</p>\n' +
+              '<h3 class="is-size-6"><strong>Kommentar</strong></h3>\n' +
+              '<p>' + data[i].comment +'</p>\n' +
+            '</div>\n' + 
+          '</div>\n' + 
+          '<footer class="card-footer">\n' +
+            '<a href="javascript:void(0)" class="card-footer-item cardDoneLink" id="cardDone-' + data[i].nr +'">Städning klar</a>\n' +
+            '<a href="javascript:void(0)" class="card-footer-item cardEditLink" id="cardEdit-' + data[i].nr +'">Redigera</a>\n' +
+          '</footer>\n' +
+       
+        '</div>\n' +
+        '</div>\n\n';
+      };
+    };
+    // add the content to the table 
+    $('#cardList').html(content);
+    //when we get an error
+   }).fail(function(jqXHR, textStatus, errorThrown) {
+     utils.notification('error', 'Något gick fel vid hämtning av rumslista, prova igen senare.');
+   });    
+
+  },
+
+  // Change room status
+  //--------------------------------------------------//
+  changeStatus: function(nr, status, upd_user) {
+    
+    // run ajaxCall() with input data, datatype and URL
+    var result = rooms.ajaxCall({
+                   "nr": nr,
+                   "status": status,
+                   "upd_user": upd_user,
+                   "func": "change_status"
+                 }, 'text', 'rooms.script.php');
+    
+    // when call is done and ok, process returned data string
+    result.done(function(data) {
+      
+      if (data == "yes") {
+
+        utils.notification('success', 'Rummets status har ändrats.');
+        rooms.cardList();
+      
+      } else {
+        
+        utils.notification('error', 'Något gick fel, prova igen senare.');
+      }
+    // if the call is not successful
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      
+      // show a message that something went wrong
+      utils.notification('error', 'Något gick fel, prova igen senare.'); 
+    });
   
+  }
 }
 
-  $('body').on('click', '#roomFormButton', function(e) {
-    rooms.add_room();
-    $('#roomNrHelp').html("");
-    $('#roomNr').removeClass('is-danger');
-    
-  });
+
 
 
 // Object containing user methods
@@ -238,50 +501,49 @@ var users = {
       switch(data) {
 
         case 'fnameErr':
-                $('#fnameHelp').html("Ogiltiga tecken i förnamn");
-                $('#fname').addClass('is-danger');
-                break;
+          $('#fnameHelp').html('Ogiltiga tecken i förnamn');
+          $('#fname').addClass('is-danger');
+          $('#fname').focus();
+          break;
 
         case 'lnameErr':
-                $('#lnameHelp').html("Ogiltiga tecken i efternamn");
-                $('#lname').addClass('is-danger');
-                break;
+          $('#lnameHelp').html('Ogiltiga tecken i efternamn');
+          $('#lname').addClass('is-danger');
+          $('#lname').focus();
+          break;
 
         case 'emailErr':
-                $('#emailHelp').html("Ej korrekt e-post format");
-                $('#email').addClass('is-danger');
-                break;
+          $('#emailHelp').html('Ej korrekt e-post format');
+          $('#email').addClass('is-danger');
+          $('#email').focus();
+          break;
 
         case 'passErr1':
-                $('#pass2Help').html("Lösenorden matchar ej, prova igen.");
-                $('#pass1, #pass2').addClass('is-danger').val("");
-                break;
+          $('#pass2Help').html('Lösenorden matchar ej, prova igen.');
+          $('#pass1, #pass2').addClass('is-danger').val("");
+          $('#pass1').focus();
+          break;
 
         case 'passErr2':
-                $('#pass1Help').html('Ogiltigt lösenord! endast A-Z 0-9 !@#$%');
-                $('#pass1').addClass('is-danger').val("");
-                break;
+          $('#pass1Help').html('Ogiltigt lösenord! endast A-Z 0-9 !@#$%');
+          $('#pass1').addClass('is-danger').val("");
+          $('#pass1').focus();
+          break;
 
         default:
-                $('#fname, #lname, #email, #pass1, #pass2').val('');        
+          $('#fname, #lname, #email, #pass1, #pass2').val(''); 
+          $('input[name="admin"]').prop( "checked", false);
+          $('#fname').focus();
 
-                $('#userMsgSection').html(
-                  '<div class="notification is-success" id="userMsg">' +
-                  '<button class="delete" id="userMsgDel"></button>' +
-                  data + ': ' + email + '</div>'
-                );
+          utils.notification('success', 'Användare med e-post ' + email + ' har skapats.');
+
       }
        // if the call is not successful
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      
       // show a message that something went wrong
-      $('#userMsgSection').html(
-        '<div class="notification is-danger" id="userMsg">' +
-        '<button class="delete" id="userMsgDel"></button>' +
-        'Något gick fel, prova igen senare</div>'
-      );      
+      $('#fname').focus();
+      utils.notification('error', 'Något gick fel, prova igen senare');     
     });
-
   },
   
   // Get all users data and list it in table
@@ -294,7 +556,7 @@ var users = {
     
     //when function is done successfully
     result.done(function(data) {
-    console.log(data);  
+     
       var content;
       
       for(var i=0; i < data.length; i++) {
@@ -329,8 +591,8 @@ var users = {
       
     //when we get an error
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus + ': ' + errorThrown);
-      console.log(jqXHR);
+      
+      utils.notification('error', 'Något gick fel, prova igen senare'); 
     });
   },
 
@@ -348,11 +610,12 @@ var users = {
       return(data);
       
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus + ': ' + errorThrown);
+       
     });
   },
 
   // Delete user from email
+  // Author: Daniel Olsson <orol1600@student.miun.se>
   //--------------------------------------------------//
   delete: function(email) {
     
@@ -369,12 +632,12 @@ var users = {
             // using vanilla js because jquery struggles with @ and . in id
             document.getElementById(rowID).className = 'is-hidden';
         
-            utils.notification('Användaren med e-post <strong>' + email + ' </strong>är borttagen.')
+            utils.notification('success', 'Användaren med e-post ' + email + ' är borttagen.')
           } else {
-            utils.notification('Något gick fel, prova igen senare.');
+            utils.notification('error', 'Något gick fel, prova igen senare.');
           }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ': ' + errorThrown);
+            utils.notification('error', 'Något gick fel, prova igen senare.');
         });
       },
 
@@ -385,11 +648,6 @@ var users = {
         // remove extra characters at beginning
         var email = fullID.substr(4);
         
-        var checkBoxes = document.getElementsByTagName('input').disabled = true;
-        for (var i = 0; i < checkBoxes.length; i++) {
-          checkBoxes[i].disabled = true;
-        }
-
         var result = users.ajaxCall({
           "func": "update_admin",
           "email": email
@@ -402,102 +660,101 @@ var users = {
           if (data == '1') {
             
             document.getElementById(fullID).setAttribute('checked', true);
-              
             document.getElementById(rowID).className = 'is-selected';
+            utils.notification('success', 'Adminstatus för ' + email + ' har uppdaterats.');
 
-            utils.notification('Admin status för ' + email + ' har uppdaterats.');
-
-              
-              
           } else if (data == '0') {
+            
             document.getElementById(fullID).setAttribute('checked', false);
             document.getElementById(rowID).className = ' ';
-
-            utils.notification('Admin status för ' + email + ' har uppdaterats.');
+            utils.notification('success', 'Adminstatus för ' + email + ' har uppdaterats.');
+          
           } else {
             
-              utils.notification('Något gick fel, prova igen senare.');
+            utils.notification('error', 'Något gick fel, prova igen senare.');
           }          
-          
-          setTimeout(function() {
-            var checkBoxes = document.getElementsByTagName('input').disabled = true;
-            for (var i = 0; i < checkBoxes.length; i++) {
-              checkBoxes[i].disabled = false;
-            }   
-          }, 5000);
-          
+
         }).fail(function(jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ': ' + errorThrown);
+            utils.notification('error', 'Något gick fel, prova igen senare.'); 
         });
-      }
+      },
+
 }
 
 
-// Listening for: "New user" form button press
-//----------------------------------------------------//
-$('body').on('click', '#userFormButton', function(e) {
-  users.add();
-  $('#fnameHelp, #lnameHelp, #emailHelp, #pass1Help, #pass2Help').html("");
-  $('#fname, #lname, #email, #pass1, #pass2').removeClass('is-danger');
-  
-});
-
-$('body').on('click', '#testbutton', function(e) {
-  var mittID = "daniel@olsson.se";
-  document.getElementById(mittID).innerHTML = "hej";
-  //$('#testdiv').html('<p>Adminstatus för ben@boj.se: ' + result + '</p>');
-});
-
-// Listening for: "Delete user" button press
-//----------------------------------------------------//
-$('body').on('click', '#userTable button', function(e) {
-  // get full id of clicked button
-  var fullID = e.target.id;
-  // remove extra characters at beginning
-  var theID = fullID.substr(4);
-  // call the delete method with theID 
-  users.delete(theID);
-});
-
-// Listening for: "Admin" checkbox change
-//----------------------------------------------------//
-$('body').on('change', '#userTable input[type="checkbox"]', function(e) {
-  // get full id of change checkbox
-  var fullID = e.target.id;
-  console.log(fullID);
-  // call the admin method with fullID 
-  users.admin(fullID);
-});
-
-
-
-// $('body').on('click', '#testbutton', function(e) {
-//   users.delete("lennart@svensk.se");
-  
-// });
-
 
 // Object containing utility methods
+// Author: Daniel Olsson <orol1600@student.miun.se>
 //----------------------------------------------------//
 var utils = {
   
-  
   // Bottom right notification 
   //--------------------------------------------------//
-  notification: function(message) {
+  notification: function(status, message) {
     
-    // grab the elements to be used
-    var notDiv = $('#notDiv');
-    var notDivMsg = $('#notDivMsg');
-    var notMsg = $('#notMsg');
-    // put the message passed into the div
-    notMsg.html(message);
-    // fade div in, pause, fade out then remove message
-    notDiv.fadeIn(1200)
-      .delay(2000)
-      .fadeOut(1200, function(){
-        notMsg.html('');
-      });
+    switch (status) {
+      
+      case "success":
+        // grab the elements to be used
+        var notSuccDiv = $('#notSuccDiv');
+        var notSuccMsg = $('#notSuccMsg');
+        
+        // put the message passed into the div
+        notSuccMsg.html(message);
+        // fade success div in, pause, fade out then remove message
+        notSuccDiv.fadeIn(500)
+          .delay(1500)
+          .fadeOut(500, function(){
+            notSuccMsg.html('');
+          });       
+        break;
+    
+      case "error":
+        // grab the elements to be used
+        var notErrDiv = $('#notErrDiv');
+        var notErrMsg = $('#notErrMsg');
+          
+        // put the message passed into the div
+        notErrMsg.html(message);
+        // fade error div in, pause, fade out then remove message
+        notErrDiv.fadeIn(500)
+          .delay(1500)
+          .fadeOut(500, function(){
+            notErrMsg.html('');
+          });
+        break;
+
+        default:
+        // grab the elements to be used
+        var notInfoDiv = $('#notInfoDiv');
+        var notInfoMsg = $('#notInfoMsg');
+          
+        // put the message passed into the div
+        notInfoMsg.html(message);
+        // fade info div in, pause, fade out then remove message
+        notInfoDiv.fadeIn(500)
+          .delay(1500)
+          .fadeOut(500, function(){
+            notInfoMsg.html('');
+          });          
+        
+    }
+  },
+
+  // Create excerpt from a text 
+  //--------------------------------------------------//
+  excerpt: function(text) {
+    
+    if (text.length > 36) {
+    
+      var shortText = text.substr(0, 35) + ' ...';
+      return shortText;
+    
+    } else {
+    
+      return text;
+    }
   }
+
 
 }

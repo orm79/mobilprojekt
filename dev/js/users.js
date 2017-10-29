@@ -50,50 +50,49 @@ var users = {
       switch(data) {
 
         case 'fnameErr':
-                $('#fnameHelp').html("Ogiltiga tecken i förnamn");
-                $('#fname').addClass('is-danger');
-                break;
+          $('#fnameHelp').html('Ogiltiga tecken i förnamn');
+          $('#fname').addClass('is-danger');
+          $('#fname').focus();
+          break;
 
         case 'lnameErr':
-                $('#lnameHelp').html("Ogiltiga tecken i efternamn");
-                $('#lname').addClass('is-danger');
-                break;
+          $('#lnameHelp').html('Ogiltiga tecken i efternamn');
+          $('#lname').addClass('is-danger');
+          $('#lname').focus();
+          break;
 
         case 'emailErr':
-                $('#emailHelp').html("Ej korrekt e-post format");
-                $('#email').addClass('is-danger');
-                break;
+          $('#emailHelp').html('Ej korrekt e-post format');
+          $('#email').addClass('is-danger');
+          $('#email').focus();
+          break;
 
         case 'passErr1':
-                $('#pass2Help').html("Lösenorden matchar ej, prova igen.");
-                $('#pass1, #pass2').addClass('is-danger').val("");
-                break;
+          $('#pass2Help').html('Lösenorden matchar ej, prova igen.');
+          $('#pass1, #pass2').addClass('is-danger').val("");
+          $('#pass1').focus();
+          break;
 
         case 'passErr2':
-                $('#pass1Help').html('Ogiltigt lösenord! endast A-Z 0-9 !@#$%');
-                $('#pass1').addClass('is-danger').val("");
-                break;
+          $('#pass1Help').html('Ogiltigt lösenord! endast A-Z 0-9 !@#$%');
+          $('#pass1').addClass('is-danger').val("");
+          $('#pass1').focus();
+          break;
 
         default:
-                $('#fname, #lname, #email, #pass1, #pass2').val('');        
+          $('#fname, #lname, #email, #pass1, #pass2').val(''); 
+          $('input[name="admin"]').prop( "checked", false);
+          $('#fname').focus();
 
-                $('#userMsgSection').html(
-                  '<div class="notification is-success" id="userMsg">' +
-                  '<button class="delete" id="userMsgDel"></button>' +
-                  data + ': ' + email + '</div>'
-                );
+          utils.notification('success', 'Användare med e-post ' + email + ' har skapats.');
+
       }
        // if the call is not successful
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      
       // show a message that something went wrong
-      $('#userMsgSection').html(
-        '<div class="notification is-danger" id="userMsg">' +
-        '<button class="delete" id="userMsgDel"></button>' +
-        'Något gick fel, prova igen senare</div>'
-      );      
+      $('#fname').focus();
+      utils.notification('error', 'Något gick fel, prova igen senare');     
     });
-
   },
   
   // Get all users data and list it in table
@@ -106,7 +105,7 @@ var users = {
     
     //when function is done successfully
     result.done(function(data) {
-    console.log(data);  
+     
       var content;
       
       for(var i=0; i < data.length; i++) {
@@ -141,8 +140,8 @@ var users = {
       
     //when we get an error
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus + ': ' + errorThrown);
-      console.log(jqXHR);
+      
+      utils.notification('error', 'Något gick fel, prova igen senare'); 
     });
   },
 
@@ -160,11 +159,12 @@ var users = {
       return(data);
       
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus + ': ' + errorThrown);
+       
     });
   },
 
   // Delete user from email
+  // Author: Daniel Olsson <orol1600@student.miun.se>
   //--------------------------------------------------//
   delete: function(email) {
     
@@ -181,12 +181,12 @@ var users = {
             // using vanilla js because jquery struggles with @ and . in id
             document.getElementById(rowID).className = 'is-hidden';
         
-            utils.notification('Användaren med e-post <strong>' + email + ' </strong>är borttagen.')
+            utils.notification('success', 'Användaren med e-post ' + email + ' är borttagen.')
           } else {
-            utils.notification('Något gick fel, prova igen senare.');
+            utils.notification('error', 'Något gick fel, prova igen senare.');
           }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ': ' + errorThrown);
+            utils.notification('error', 'Något gick fel, prova igen senare.');
         });
       },
 
@@ -197,11 +197,6 @@ var users = {
         // remove extra characters at beginning
         var email = fullID.substr(4);
         
-        var checkBoxes = document.getElementsByTagName('input').disabled = true;
-        for (var i = 0; i < checkBoxes.length; i++) {
-          checkBoxes[i].disabled = true;
-        }
-
         var result = users.ajaxCall({
           "func": "update_admin",
           "email": email
@@ -214,76 +209,23 @@ var users = {
           if (data == '1') {
             
             document.getElementById(fullID).setAttribute('checked', true);
-              
             document.getElementById(rowID).className = 'is-selected';
+            utils.notification('success', 'Adminstatus för ' + email + ' har uppdaterats.');
 
-            utils.notification('Admin status för ' + email + ' har uppdaterats.');
-
-              
-              
           } else if (data == '0') {
+            
             document.getElementById(fullID).setAttribute('checked', false);
             document.getElementById(rowID).className = ' ';
-
-            utils.notification('Admin status för ' + email + ' har uppdaterats.');
+            utils.notification('success', 'Adminstatus för ' + email + ' har uppdaterats.');
+          
           } else {
             
-              utils.notification('Något gick fel, prova igen senare.');
+            utils.notification('error', 'Något gick fel, prova igen senare.');
           }          
-          
-          setTimeout(function() {
-            var checkBoxes = document.getElementsByTagName('input').disabled = true;
-            for (var i = 0; i < checkBoxes.length; i++) {
-              checkBoxes[i].disabled = false;
-            }   
-          }, 5000);
-          
+
         }).fail(function(jqXHR, textStatus, errorThrown) {
-          console.log(textStatus + ': ' + errorThrown);
+            utils.notification('error', 'Något gick fel, prova igen senare.'); 
         });
-      }
+      },
+
 }
-
-
-// Listening for: "New user" form button press
-//----------------------------------------------------//
-$('body').on('click', '#userFormButton', function(e) {
-  users.add();
-  $('#fnameHelp, #lnameHelp, #emailHelp, #pass1Help, #pass2Help').html("");
-  $('#fname, #lname, #email, #pass1, #pass2').removeClass('is-danger');
-  
-});
-
-$('body').on('click', '#testbutton', function(e) {
-  var mittID = "daniel@olsson.se";
-  document.getElementById(mittID).innerHTML = "hej";
-  //$('#testdiv').html('<p>Adminstatus för ben@boj.se: ' + result + '</p>');
-});
-
-// Listening for: "Delete user" button press
-//----------------------------------------------------//
-$('body').on('click', '#userTable button', function(e) {
-  // get full id of clicked button
-  var fullID = e.target.id;
-  // remove extra characters at beginning
-  var theID = fullID.substr(4);
-  // call the delete method with theID 
-  users.delete(theID);
-});
-
-// Listening for: "Admin" checkbox change
-//----------------------------------------------------//
-$('body').on('change', '#userTable input[type="checkbox"]', function(e) {
-  // get full id of change checkbox
-  var fullID = e.target.id;
-  console.log(fullID);
-  // call the admin method with fullID 
-  users.admin(fullID);
-});
-
-
-
-// $('body').on('click', '#testbutton', function(e) {
-//   users.delete("lennart@svensk.se");
-  
-// });

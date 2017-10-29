@@ -94,7 +94,7 @@ class Room {
   /**
   * Get all rooms 
   *
-  * @return array    Associative array with all rooms data
+  * @return string  Result as json-formatted string
   */
   public function all_rooms() {
         
@@ -114,7 +114,7 @@ class Room {
   *
   * @param $nr  string  Room number
   *
-  * @return array  Result as associative array
+  * @return string  Result as json-formatted string
   */
   public function get_room($nr) {
     
@@ -128,37 +128,40 @@ class Room {
 
     $this -> db -> bind(":nr", $this -> nr);
 
-    $result = $this -> db -> result();
-    return $result;
+    $result = $this -> db -> result_set();
+    return json_encode($result);
     exit();
   }
 
 
   /**
-  * Update room info
+  * Update room
   *
   * @param $nr      string     Room number
   * @param $info    string     Room information  
   *
   * @return string "true" / "false"
   */
-  public function update_info($nr, $info) {
+  public function update_room($nr, $info, $comment, $status, $upd_user) {
     
     $query = "UPDATE rooms
-              SET info = :info
+              SET info = :info, comment = :comment, status = :status, upd_user = :upd_user, upd_time = NOW()
               WHERE nr = :nr";
     
     $this -> db -> query($query);
     
     $this -> db -> bind(":nr", $nr);
     $this -> db -> bind(":info", $info);
+    $this -> db -> bind(":comment", $comment);
+    $this -> db -> bind(":status", $status);
+    $this -> db -> bind(":upd_user", $upd_user);
     
     $this -> db -> execute();
    
     if(($this -> db -> rowCount()) > 0) {
-     return "true";
+     return "yes";
     } else {
-      return "false";
+      return "no";
     }
   }
 
@@ -166,31 +169,31 @@ class Room {
   /**
   * Change status for a room
   *
-  * @param $nr        string     Room number
-  * @param $status    int        Room cleaning status 1 or 0  
+  * @param $nr          string     Room number
+  * @param $status      int        Room cleaning status 1 or 0 
+  * @param $upd_user    string     The user email making the update  
   *
-  * @return string "true" / "false"
+  * @return string "yes" / "no"
   */
-  public function change_status($nr, $status) {
+  public function change_status($nr, $status, $upd_user) {
     
-    $user = $_SESSION["sess_id"];
     
     $query = "UPDATE rooms
-              SET status = :status, upd_time = NOW(), upd_user = :user
+              SET status = :status, upd_time = NOW(), upd_user = :upd_user
               WHERE nr = :nr";
     
     $this -> db -> query($query);
     
     $this -> db -> bind(":nr", $nr);
     $this -> db -> bind(":status", $status);
-    $this -> db -> bind(":user", $user);
+    $this -> db -> bind(":upd_user", $upd_user);
     
     $this -> db -> execute();
    
     if(($this -> db -> rowCount()) > 0) {
-     return "true";
+     return "yes";
     } else {
-      return "false";
+      return "no";
     }
   }
   

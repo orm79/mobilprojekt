@@ -1,9 +1,15 @@
 <?php
-  $thisPage = "Rumslista";
-  include("includes/head.inc.php");
-  include("includes/nav.inc.php");
+/**
+* Daniel Olsson <orol1600@student.miun.se>
+*/
+$thisPage = "Rumslista";
+include("includes/head.inc.php");
+include("includes/nav.inc.php");
 ?>
-<section class="hero is-primary is-bold">
+<!-- hidden span with user email so we can fetch it with javascript -->
+<span id="modUserEmail" class="is-hidden"><?= $_SESSION["sess_id"] ?></span>
+
+<section class="hero is-primary has-bg-img">
   <div class="hero-body">
     <div class="container has-text-centered">
       <h1 class="title is-size-2">
@@ -12,7 +18,7 @@
       <h2 class="subtitle">
         Se och redigera rum
       </h2>
-      </div>
+      </div>z
   </div>
 </section>
 
@@ -20,7 +26,7 @@
   <div class="container">
     <div class="column is-10 is-offset-1">
   
-      <table class="table is-fullwidth is-hoverable">
+      <table class="table is-fullwidth">
         <thead>
           <tr>
             <th>Rum</th>
@@ -37,7 +43,7 @@
   </div>
 </section>
 
-
+<?php include("includes/modal.inc.php"); ?>
 
 <script>
 // Display table with all rooms

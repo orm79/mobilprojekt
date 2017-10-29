@@ -6,8 +6,6 @@ $thisPage = "Logga in";
   include("includes/head.inc.php");
   include("functions/login.func.php");
   
-  
-
   $email = "";
   
   if(isset($_POST["form-button"])) {
@@ -15,18 +13,21 @@ $thisPage = "Logga in";
     login();
   }
 ?>
-<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+<nav class="navbar is-light" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="#">
-        <img src="http://placehold.it/112x28" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
-      </a>
+    <a class="navbar-item" href="#">
+    <div.logo-div>
+      <span class="icon"><i class="fa fa-diamond"></i></span>
+      <span>HOTEL<strong>LYX</strong></span>
+    </div>
+  </a>
     </div>
 </nav>
 
-<section class="hero is-primary is-bold">
+<section class="hero is-primary has-bg-img">
   <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
+    <div class="container has-text-centered">
+      <h1 class="title is-size-2">
         Välkommen
       </h1>
       <h2 class="subtitle">
@@ -39,14 +40,12 @@ $thisPage = "Logga in";
 <section class="section container">
   <div class="column is-6 is-offset-3">
 
-    <h1 class="is-size-4 is-uppercase<">Skriv in dina uppgifter</h1>
-    <br>
     <form action="index.php" method="post" class="box">
 
       <div class="field">
         <label class="label">E-post</label>
         <div class="control">
-          <input class="input" id="email" name="email" type="email" placeholder="E-post">
+          <input class="input" id="email" name="email" type="email" placeholder="E-post" autofocus>
         </div>
       </div>
 
@@ -57,30 +56,38 @@ $thisPage = "Logga in";
         </div>
       </div>
 
-        <br />
+        <br>
 
       <div class="field">
         <div class="control">
-          <input type="submit" class="button is-primary is-medium" id="formButton" name="form-button" value="LOGGA IN"></input>
+          <input type="submit" class="button is-primary" id="formButton" name="form-button" value="Logga in"></input>
         </div>
       </div>
     </form>
 
-    <br />
+    <br>
 
-    <div id="userMsgSection">
-      <?php
-      if(isset($_GET["retry"])) {
-        echo "<div class='notification is-danger' id='userMsg'>
-          <button class='delete' id='userMsgDel'></button>Fel e-post eller lösenord</div>";
-        }
-      ?>
     </div>
   
   </div> <!-- end .column -->
 </section>
 
+<script>
+    $( document ).ready(function(){
+      
+      var isRetry = function(){
+        // check for ?retry in window url bar
+        return window.location.href.search("[?&]retry") != -1;
+      };
+      // run check
+      retry = isRetry();
+      // if ?retry in window url bar then notify user to retry
+      if(retry === true) {
+        utils.notification('error', 'Fel e-post eller lösenord, prova igen.');
+      }
+    }); 
+</script>
+
 <?php
   include("includes/footer.inc.php");
 ?>
-

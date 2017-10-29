@@ -43,16 +43,13 @@ switch ( $func ) {
         echo $result;
         break;
         
-    case "change_status":
-        $nr = trim($_POST["nr"]);
-        $result = $room -> change_status($nr);
-        echo $result;
-        break;
-
-    case "update_info":
-        $nr = trim($_POST["nr"]);
-        $info = trim($_POST["info"]);
-        $result = $room -> update_info($nr, $info);
+    case "update_room":
+        $nr       = trim($_POST["nr"]);
+        $info     = trim($_POST["info"]);
+        $comment  = trim($_POST["comment"]);
+        $status   = trim($_POST["status"]);
+        $upd_user = trim($_POST["upd_user"]);
+        $result = $room -> update_room($nr, $info, $comment, $status, $upd_user);
         echo $result;
         break;
 
@@ -60,31 +57,14 @@ switch ( $func ) {
         $result = $room -> all_rooms();
         echo $result;
         break;
-   
+
+    case "change_status":
+        $nr     = trim($_POST["nr"]);
+        $status = trim($_POST["status"]);
+        $upd_user = trim($_POST["upd_user"]);
+        $result = $room -> change_status($nr, $status, $upd_user);
+        echo $result;
+        break;
             
         
 }
-
-    // if(!($pass1 === $pass2)) {
-    //     $msg = "passErr1";
-    //     echo $msg;
-    //     exit();
-    // } else {
-    //     // new instance of Validate class
-    //     $validate = new Validate();
-    //     // call Validate::signup with first name/last name/email/password parameters
-    //     $valid = $validate -> signup($fname, $lname, $email, $pass1);
-    //     // if the returned string is not "valid" return the failure message
-    //     if ($valid !== "valid") {
-    //         echo $valid;
-    //         exit();
-    //     } else {
-    //         // else create a new instance of User class
-    //         $user = new User();
-    //         // call User::signup with first name/last name/pass/email parameters
-    //         $signup = $user -> signup($fname, $lname, $pass1, $email, $admin);
-    //         // return account successfully created message
-    //         echo $signup;
-    //         exit();
-    //     }
-    // }

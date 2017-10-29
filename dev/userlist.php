@@ -6,7 +6,7 @@ $thisPage = "Användarlista";
   include("includes/head.inc.php");
   include("includes/nav.inc.php");
 ?>
-<section class="hero is-primary is-bold">
+<section class="hero is-primary has-bg-img">
   <div class="hero-body">
     <div class="container has-text-centered">
       <h1 class="title is-size-2">
