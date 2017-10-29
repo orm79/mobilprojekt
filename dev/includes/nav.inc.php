@@ -1,12 +1,8 @@
-<?php if(!User::logged_in()) {
-        Redirect::to("index.php");
-      }
-
-      $user = new User();
-      $logged_in = User::logged_in();
-      $admin = $user -> get_admin();
-      ?>
-
+<?php 
+$user = new User();
+$logged_in = User::logged_in();
+$admin = $user -> get_admin();
+?>
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
     
     <div class="navbar-brand">

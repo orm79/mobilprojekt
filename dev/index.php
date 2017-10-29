@@ -2,17 +2,36 @@
 /**
 * Daniel Olsson <orol1600@student.miun.se>
 */
+session_start();
+include("config.php");
+include("functions/login.func.php");
+
 $thisPage = "Logga in";
-  include("includes/head.inc.php");
-  include("functions/login.func.php");
-  
-  $email = "";
-  
-  if(isset($_POST["form-button"])) {
-    $email = $_POST["email"];
-    login();
-  }
+
+$email = "";
+
+if(isset($_POST["form-button"])) {
+$email = $_POST["email"];
+login();
+}
 ?>
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- jQuery CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <title> <?= $siteTitle . $divider . $thisPage ?>  </title>
+</head>
+
+<body>
+
 <nav class="navbar is-light" aria-label="main navigation">
     <div class="navbar-brand">
     <a class="navbar-item" href="#">

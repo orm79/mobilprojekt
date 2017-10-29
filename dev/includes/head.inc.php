@@ -1,6 +1,9 @@
 <?php
 session_start();
 include("config.php");
+if(!User::logged_in()) {
+  Redirect::to("index.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="sv">

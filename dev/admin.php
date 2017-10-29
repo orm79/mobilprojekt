@@ -9,9 +9,6 @@ $thisPage = "Administratör";
   $user = new User();
   $your_name = $user -> get_name();
 ?>
-<!-- hidden span with user email so we can fetch it with javascript -->
-<span id="modUserEmail" class="is-hidden"><?= $_SESSION["sess_id"] ?></span>
-
 <section class="hero is-primary has-bg-img">
   <div class="hero-body">
     <div class="container has-text-centered">
@@ -24,7 +21,8 @@ $thisPage = "Administratör";
     </div>
   </div>
 </section>
-
+<!-- hidden span with user email so we can fetch it with javascript -->
+<span id="modUserEmail" class="is-hidden"><?= $_SESSION["sess_id"] ?></span>
 <section class="section">
 
   <div class="container">

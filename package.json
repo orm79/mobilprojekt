@@ -4,14 +4,14 @@
   "description": "Project for course DT148G at MiUN.se",
   "main": "index.php",
   "dependencies": {
-    "bulma": "^0.6.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^3.1.0",
-    "gulp-wait": "0.0.2"
+    "gulp-wait": "0.0.2",
+    "bulma": "^0.6.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
