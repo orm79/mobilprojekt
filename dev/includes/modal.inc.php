@@ -1,9 +1,9 @@
 
 <!-- Modal for editing room information, not visible by default -->
 <div class="modal" id="modDiv">
-  <div class="modal-background"></div>
+  <div class="modal-background" id="modalBg"></div>
   
-  <div class="modal-card">
+  <div class="modal-card" id="modalCard">
     
     <header class="modal-card-head">
       <p class="modal-card-title">Redigera rum</p>

@@ -95,6 +95,10 @@ $('body').on('click', '.cardEditLink', function(e) {
 var listenModClose = function () {
 
   $('body').on('click', '#modCloseBtn, #modCancelBtn, .modal-background', function() {
+    
+    // fade the modal div out on close
+    $('#modDiv').fadeOut(750);
+    // empty all the values from the modal fields
     document.getElementById('modDiv').className = 'modal';
     document.getElementById('roomNr').innerHTML = '';
     document.getElementById('modRoomInfo').value = '';
