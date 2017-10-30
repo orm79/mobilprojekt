@@ -132,7 +132,7 @@ var listenModClose = function () {
   $('body').on('click', '#modCloseBtn, #modCancelBtn, .modal-background', function() {
     
     // fade the modal div out on close
-    $('#modDiv').fadeOut(750);
+    $('#modDiv').fadeOut(500);
     // empty all the values from the modal fields
     document.getElementById('modDiv').className = 'modal';
     document.getElementById('roomNr').innerHTML = '';
@@ -312,10 +312,7 @@ var rooms = {
       document.getElementById('modUser').innerHTML = data[0].upd_user;
       document.getElementById('modDate').innerHTML = data[0].upd_time;
       
-      $('#modDiv').css('display', 'flex');
-      $('#modalBg').hide().fadeIn(1000);
-      $('#modalCard').addClass('magictime spaceInDown');
-      
+      $('#modDiv').fadeIn(500);
       
     }).fail(function(jqXHR, textStatus, errorThrown) {
       utils.notification('error', 'Något gick fel vid hämtning av rumslista, prova igen senare.');

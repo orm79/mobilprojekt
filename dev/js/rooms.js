@@ -142,10 +142,7 @@ var rooms = {
       document.getElementById('modUser').innerHTML = data[0].upd_user;
       document.getElementById('modDate').innerHTML = data[0].upd_time;
       
-      $('#modDiv').css('display', 'flex');
-      $('#modalBg').hide().fadeIn(1000);
-      $('#modalCard').addClass('magictime spaceInDown');
-      
+      $('#modDiv').fadeIn(500);
       
     }).fail(function(jqXHR, textStatus, errorThrown) {
       utils.notification('error', 'Något gick fel vid hämtning av rumslista, prova igen senare.');

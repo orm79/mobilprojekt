@@ -97,7 +97,7 @@ var listenModClose = function () {
   $('body').on('click', '#modCloseBtn, #modCancelBtn, .modal-background', function() {
     
     // fade the modal div out on close
-    $('#modDiv').fadeOut(750);
+    $('#modDiv').fadeOut(500);
     // empty all the values from the modal fields
     document.getElementById('modDiv').className = 'modal';
     document.getElementById('roomNr').innerHTML = '';
