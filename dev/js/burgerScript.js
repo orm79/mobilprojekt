@@ -1,5 +1,6 @@
 
 // Object containing methods for the mobile burger menu
+// Code from the bulma.io website
 //----------------------------------------------------//
 
 burgerMenu = {

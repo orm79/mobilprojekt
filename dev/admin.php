@@ -1,6 +1,8 @@
 <?php
 /**
-* Daniel Olsson <orol1600@student.miun.se>
+* Admin home page for the application
+*
+* @author Daniel Olsson <orol1600@student.miun.se>
 */
 $thisPage = "Administratör";
   include("includes/head.inc.php");

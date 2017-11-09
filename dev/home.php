@@ -1,6 +1,8 @@
 <?php
 /**
-* Daniel Olsson <orol1600@student.miun.se>
+* User home page for the application
+*
+* @author Daniel Olsson <orol1600@student.miun.se>
 */
 $thisPage = "Rum att städa";
   include("includes/head.inc.php");
@@ -12,12 +14,11 @@ $thisPage = "Rum att städa";
 <span id="modUserEmail" class="is-hidden"><?= $_SESSION["sess_id"] ?></span>
 
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
+  
+<div class="navbar-brand">
     <a class="navbar-item" href="home.php">
-      <div.logo-div>
-        <span class="icon"><i class="fa fa-diamond"></i></span>
-        <span>HOTEL<strong>LYX</strong></span>
-      </div>
+      <span class="icon"><i class="fa fa-diamond"></i></span>
+      <span>HOTEL<strong>LYX</strong></span>
     </a>
 
     <button class="button navbar-burger" data-target="navMenu">
@@ -25,6 +26,9 @@ $thisPage = "Rum att städa";
       <span></span>
       <span></span>
     </button>
+  </div>
+
+  <div class="navbar-start">
   </div>
 
   <div class="navbar-menu navbar-end" id="navMenu">

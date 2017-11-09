@@ -1,4 +1,5 @@
-
+<!-- page footer for the application
+    daniel olsson <orol1600@student.miun.se> -->
 <footer class="footer">
     <div class="container">
       <div class="content has-text-centered">
@@ -14,17 +15,17 @@
 
   <div class="box not-div" id="notSuccDiv">
     <p id="notSuccMsg"></p>
-    <span class="icon" id="infoIcon"><i class="fa fa-info-circle fa-lg"></i></span>
+    <span class="icon" id="infoIconSucc"><i class="fa fa-check-circle fa-lg"></i></span>
   </div>
   
   <div class="box not-div" id="notErrDiv">
     <p id="notErrMsg"></p>
-    <span class="icon" id="infoIcon"><i class="fa fa-info-circle fa-lg"></i></span>
+    <span class="icon" id="infoIconErr"><i class="fa fa-exclamation-circle fa-lg"></i></span>
   </div>
 
   <div class="box not-div" id="notInfoDiv">
     <p id="notInfoMsg"></p>
-    <span class="icon" id="infoIcon"><i class="fa fa-info-circle fa-lg"></i></span>
+    <span class="icon" id="infoIconMsg"><i class="fa fa-info-circle fa-lg"></i></span>
   </div>
 </body>
 

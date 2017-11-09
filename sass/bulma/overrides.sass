@@ -1,6 +1,6 @@
-.form-container
-  max-width: 720px
-  margin: 0 auto
+
+/* Modal margins 0 on mobile for more screen space */
+$modal-content-margin-mobile: 0
 
 /* Custom primary color */
 $main: hsl(245, 100%, 96%)
@@ -9,7 +9,8 @@ $main-invert: hsl(0, 0%, 29%)
 $primary: $main
 $primary-invert: $main-invert
 
-$card-background-color: white
+html 
+  background: $primary
 
 /* screen reader only class */
 .sr-only
@@ -23,31 +24,36 @@ $card-background-color: white
   border: 0
 
 /* Room card rules */
+
+$card-background-color: white
+
 #cardList
   display: flex
   flex-wrap: wrap
   justify-content: space-between
 
 .card
-  min-width: 300px !important
+  min-width: 250px !important
   
 .card-header
   background-color: hsl(0, 0%, 96%)
   
-
 /* Notification div rules */
 div.not-div
   position: fixed
   display: none
-  right: 20px
-  bottom: 20px
+  left: 50%
+  top: 95%
+  transform: translate(-50%, -95%)
   z-index: 3000
-  width: 300px
 
-  #infoIcon 
+  p 
+    margin-top: 10px
+    
+  #infoIconSucc, #infoIconErr, #infoIconMsg 
     position: absolute
-    top: 5px
-    right: 5px
+    top: 3px
+    right: 3px
 
 /* Notification colors */
 div#notSuccDiv
@@ -62,9 +68,6 @@ div#notInfoDiv
   background-color: hsl(204, 86%, 53%)
   color: #ffffff
 
-.divider
-  display: none
-
 /* Responsive hero bg image, different size depening on window size */
 .has-bg-img
   background: url("../img/hero-img-lg.jpg")
@@ -74,10 +77,12 @@ div#notInfoDiv
   .has-bg-img
     background: url("../img/hero-img-md.jpg")
 
-
 @media only screen and (max-width: 768px) 
   .has-bg-img
-    background: url("../img/hero-img-sm.jpg")
-  .divider
-    display: block
+    background: url("../img/hero-img-sm.jpg") 
+
+  
+
+
+  
 

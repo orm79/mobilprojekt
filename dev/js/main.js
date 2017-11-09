@@ -1,5 +1,6 @@
 
 // Object containing methods for the mobile burger menu
+// Code from the bulma.io website
 //----------------------------------------------------//
 
 burgerMenu = {
@@ -33,6 +34,7 @@ burgerMenu = {
 }
 
 burgerMenu.toggle();
+
 // Event listeners for the application
 // Author: Daniel Olsson <orol1600@student.miun.se>
 //----------------------------------------------------//
@@ -273,13 +275,8 @@ var rooms = {
                     '<td class="is-hidden-mobile">' + comment + '</td\n>' +
                     '<td>' + cleanStatus + '</td\n>' +
                     '<td>\n' +
-                      '<button class="button is-pulled-right" style="z-index: 20;" id="edit-' + data[i].nr + '">' + 
-                        '<span style="z-index: -15;">\n' + 
-                          'Redigera &nbsp;\n' +
-                          '<span class="icon is-small" style="z-index. -15;"\n>' + 
-                            '<i class="fa fa-pencil" aria-hidden="true"></i>\n' +
-                          '</span>\n' +
-                        '</span>\n' +
+                      '<button class="button is-pulled-right" id="edit-' + data[i].nr + '">' + 
+                        'Redigera\n' +
                       '</button>\n' +
                     '</td>\n' +
                   '</tr>\n\n';
@@ -312,10 +309,10 @@ var rooms = {
       document.getElementById('modUser').innerHTML = data[0].upd_user;
       document.getElementById('modDate').innerHTML = data[0].upd_time;
       
-      $('#modDiv').fadeIn(500);
+      $('#modDiv').fadeIn(500).css('display', 'flex').addClass('is-active');
       
     }).fail(function(jqXHR, textStatus, errorThrown) {
-      utils.notification('error', 'Något gick fel vid hämtning av rumslista, prova igen senare.');
+      utils.notification('error', 'Något gick fel, prova igen senare.');
     });
   },
 
@@ -353,7 +350,6 @@ var rooms = {
           rooms.all();
           rooms.cardList();
         } else {
-          
           utils.notification('error', 'Något gick fel, prova igen senare.');
         }
       }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -414,7 +410,7 @@ var rooms = {
     $('#cardList').html(content);
     //when we get an error
    }).fail(function(jqXHR, textStatus, errorThrown) {
-     utils.notification('error', 'Något gick fel vid hämtning av rumslista, prova igen senare.');
+      utils.notification('error', 'Något gick fel, prova igen senare.');
    });    
 
   },
@@ -461,8 +457,8 @@ var rooms = {
 
 
 
-
-// Object containing user methods
+// Object containing users methods
+// Author: Daniel Olsson <orol1600@student.miun.se>
 //----------------------------------------------------//
 var users = {
 
@@ -591,8 +587,8 @@ var users = {
                         '</label>\n' +
                       '</td>\n' +
                       '<td>\n' +
-                        '<button class="button is-warning" id="del-' + data[i].email + '">' + 
-                            'Radera\n' +
+                        '<button class="button is-pulled-right" id="del-' + data[i].email + '">' + 
+                            'Ta bort\n' +
                         '</button>\n' +
                       '</td>\n' +
                     '</tr>\n\n';
@@ -693,13 +689,12 @@ var users = {
 }
 
 
-
 // Object containing utility methods
 // Author: Daniel Olsson <orol1600@student.miun.se>
 //----------------------------------------------------//
 var utils = {
   
-  // Bottom right notification 
+  // Bottom notification
   //--------------------------------------------------//
   notification: function(status, message) {
     

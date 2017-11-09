@@ -1,6 +1,8 @@
 <?php
 /**
-* Daniel Olsson <orol1600@student.miun.se>
+* Add user page for the application
+*
+* @author Daniel Olsson <orol1600@student.miun.se>
 */
 $thisPage = "Registrera användare";
   include("includes/head.inc.php");
@@ -101,7 +103,7 @@ $thisPage = "Registrera användare";
 
       <div class="field">
         <div class="control">
-          <button class="button is-primary is-medium" id="userFormButton">SKICKA</button>
+          <button class="button is-link" id="userFormButton">Registrera</button>
         </div>
       </div>
     </form>  

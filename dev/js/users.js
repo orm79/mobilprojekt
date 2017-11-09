@@ -1,6 +1,6 @@
 
-
-// Object containing user methods
+// Object containing users methods
+// Author: Daniel Olsson <orol1600@student.miun.se>
 //----------------------------------------------------//
 var users = {
 
@@ -129,8 +129,8 @@ var users = {
                         '</label>\n' +
                       '</td>\n' +
                       '<td>\n' +
-                        '<button class="button is-warning" id="del-' + data[i].email + '">' + 
-                            'Radera\n' +
+                        '<button class="button is-pulled-right" id="del-' + data[i].email + '">' + 
+                            'Ta bort\n' +
                         '</button>\n' +
                       '</td>\n' +
                     '</tr>\n\n';

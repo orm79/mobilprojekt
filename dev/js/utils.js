@@ -1,11 +1,10 @@
 
-
 // Object containing utility methods
 // Author: Daniel Olsson <orol1600@student.miun.se>
 //----------------------------------------------------//
 var utils = {
   
-  // Bottom right notification 
+  // Bottom notification
   //--------------------------------------------------//
   notification: function(status, message) {
     

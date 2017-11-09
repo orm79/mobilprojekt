@@ -1,6 +1,8 @@
 <?php
 /**
-* Daniel Olsson <orol1600@student.miun.se>
+* Add room page for the application
+*
+* @author Daniel Olsson <orol1600@student.miun.se>
 */
 $thisPage = "Lägg till rum";
 include("includes/head.inc.php");

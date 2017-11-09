@@ -1,8 +1,8 @@
-.form-container {
-  max-width: 720px;
-  margin: 0 auto; }
-
+/* Modal margins 0 on mobile for more screen space */
 /* Custom primary color */
+html {
+  background: #ecebff; }
+
 /* screen reader only class */
 .sr-only {
   position: absolute;
@@ -21,7 +21,7 @@
   justify-content: space-between; }
 
 .card {
-  min-width: 300px !important; }
+  min-width: 250px !important; }
 
 .card-header {
   background-color: whitesmoke; }
@@ -30,14 +30,16 @@
 div.not-div {
   position: fixed;
   display: none;
-  right: 20px;
-  bottom: 20px;
-  z-index: 3000;
-  width: 300px; }
-  div.not-div #infoIcon {
+  left: 50%;
+  top: 95%;
+  transform: translate(-50%, -95%);
+  z-index: 3000; }
+  div.not-div p {
+    margin-top: 10px; }
+  div.not-div #infoIconSucc, div.not-div #infoIconErr, div.not-div #infoIconMsg {
     position: absolute;
-    top: 5px;
-    right: 5px; }
+    top: 3px;
+    right: 3px; }
 
 /* Notification colors */
 div#notSuccDiv {
@@ -52,9 +54,6 @@ div#notInfoDiv {
   background-color: #209cee;
   color: #ffffff; }
 
-.divider {
-  display: none; }
-
 /* Responsive hero bg image, different size depening on window size */
 .has-bg-img {
   background: url("../img/hero-img-lg.jpg");
@@ -66,9 +65,7 @@ div#notInfoDiv {
 
 @media only screen and (max-width: 768px) {
   .has-bg-img {
-    background: url("../img/hero-img-sm.jpg"); }
-  .divider {
-    display: block; } }
+    background: url("../img/hero-img-sm.jpg"); } }
 
 /*! bulma.io v0.6.0 | MIT License | github.com/jgthms/bulma */
 @keyframes spinAround {
@@ -3818,7 +3815,7 @@ a.dropdown-item {
 
 .modal-content,
 .modal-card {
-  margin: 0 20px;
+  margin: 0 0;
   max-height: calc(100vh - 160px);
   overflow: auto;
   position: relative;

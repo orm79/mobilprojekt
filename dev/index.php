@@ -1,6 +1,8 @@
 <?php
 /**
-* Daniel Olsson <orol1600@student.miun.se>
+* Login page for the application
+*
+* @author Daniel Olsson <orol1600@student.miun.se>
 */
 session_start();
 include("config.php");

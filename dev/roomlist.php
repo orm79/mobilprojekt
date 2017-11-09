@@ -1,6 +1,8 @@
 <?php
 /**
-* Daniel Olsson <orol1600@student.miun.se>
+* List all rooms page for the application
+*
+* @author Daniel Olsson <orol1600@student.miun.se>
 */
 $thisPage = "Rumslista";
 include("includes/head.inc.php");
@@ -18,7 +20,7 @@ include("includes/nav.inc.php");
       <h2 class="subtitle">
         Se och redigera rum
       </h2>
-      </div>z
+      </div>
   </div>
 </section>
 

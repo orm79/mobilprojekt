@@ -1,5 +1,6 @@
 
-<!-- Modal for editing room information, not visible by default -->
+<!-- modal for editing room information, not visible by default
+    daniel Olsson <orol1600@student.miun.se> -->
 <div class="modal" id="modDiv">
   <div class="modal-background" id="modalBg"></div>
   
